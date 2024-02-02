@@ -1,0 +1,32 @@
+<div class="container">
+    <div>
+        <h2>Register</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <div class="mb-3 user-name">
+                <input type="text" class="form-control" placeholder="Username" name="username"
+                    formControlName="username" autocomplete="username">
+                <div *ngIf="registerForm.get('username')?.dirty || formSubmitted">
+                    <span class="error" *ngIf="registerForm.get('username')?.hasError('required')">
+                        Username is Mandatory
+                    </span>
+                </div>
+            </div>
+            <div class="mb-3 password">
+                <input type="password" class="form-control" placeholder="Password" name="password"
+                    formControlName="password" autocomplete="current-password">
+                <div *ngIf="registerForm.get('password')?.dirty || formSubmitted">
+                    <span class="error" *ngIf="registerForm.get('password')?.hasError('required')">
+                        Password is Mandatory</span>
+                    <span class="error" *ngIf="registerForm.get('password')?.hasError('minLength')">
+                        Password must be at least 4 charaters long</span>
+                </div>
+            </div>
+            <div *ngIf="message" style="margin-bottom: 10px;">
+                <span [ngClass]="{'error':hasError,'valid':!hasError}">
+                    {{message}}
+                </span>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>

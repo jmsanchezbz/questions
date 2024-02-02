@@ -1,0 +1,29 @@
+<p>question-filter works!</p>
+<form [formGroup]="filterForm">
+    <label for="cbxEntitat">Entitat</label>
+    <select id="cbxEntitat" name="cbxEntitat" formControlName="adm">
+        <option disabled value="">Select</option>
+        <option value="local">Local</option>
+        <option value="caib">Caib</option>
+    </select>
+    <label for="cbxGroup">Grup</label>
+    <select id="cbxGroup" name="cbxGroup" formControlName="grp">
+        <option value="">Select</option>
+        <option *ngFor="let g of groups; index as i" [ngValue]="g">
+            {{ g | uppercase }}
+        </option>
+    </select>
+    <label for="cbxTheme">Tema</label>
+    <select id="cbxTheme" name="cbxTheme" formControlName="thm">
+        <option disabled value="">Select</option>
+        <option *ngFor="let theme of themes; index as i" [ngValue]="theme">
+            Tema {{ theme }}
+        </option>
+    </select>
+    <label for="cbxVerified">Verificades?</label>
+    <select id="cbxVerified" name="cbxVerified" formControlName="verified">
+        <option disabled value="">Select</option>
+        <option value="false">No</option>
+        <option value="true">Si</option>
+    </select>
+</form>

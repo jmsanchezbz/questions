@@ -1,0 +1,24 @@
+import { Injectable } from "@angular/core";
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserStoreService {
+  readonly USER_TOKEN: string = 'userToken';
+  
+  constructor() {
+  }
+
+  set token(token: string) {
+    localStorage.setItem(this.USER_TOKEN, token);
+    //sessionStorage.setItem('userToken', token); //in session storage
+  }
+
+  get token():string {
+    return localStorage.getItem(this.USER_TOKEN);
+  }
+
+  reset() {
+    localStorage.removeItem(this.USER_TOKEN);
+  }
+}
