@@ -1,0 +1,35 @@
+<div class="question">
+    <h3>{{ question.number }}. {{ question.question }}</h3>
+    <i *ngIf="question.verified" class="material-icons" style="color:lightgreen">done</i>
+    <form [formGroup]="questionForm">
+        <div>
+            <input id="answer1" name="answer" type="radio" value="1" formControlName="answer"/>
+            <label for="answer1">A. {{ question.option1 }}</label>
+        </div>
+        <div>
+            <input id="answer2" name="answer" type="radio" value="2" formControlName="answer"/>
+            <label for="answer2">B. {{ question.option2 }}</label>
+        </div>
+        <div>
+            <input id="answer3" name="answer" type="radio" value="3" formControlName="answer"/>
+            <label for="answer3">C. {{ question.option3 }}</label>
+        </div>
+        <div>
+            <input id="answer4" name="answer" type="radio" value="4" formControlName="answer"/>
+            <label for="answer4">D. {{ question.option4 }}</label>
+        </div>
+        <div id="feedback">
+            {{ feedback }}
+        </div>
+        <button type="submit" (click)="submit()" [disabled]="!questionForm.valid">Submit</button>
+    </form>
+    <div *ngIf="question.answer">
+        <button type="button" (click)="toggleAnswer()">Show explanation</button>
+        <div *ngIf="isVisible">
+            <hr />
+            <b>Resposta</b><br />
+            <label>{{ question.answer }}</label>
+            <label>{{ question.explanation }}</label>
+        </div>
+    </div>
+</div>

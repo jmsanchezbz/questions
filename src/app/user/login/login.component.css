@@ -1,0 +1,12 @@
+.error {
+    color: red;
+}
+
+.valid {
+    color: green;
+}
+
+.container {
+    width: 400px;
+    margin: 0 auto;
+}

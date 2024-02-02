@@ -1,0 +1,31 @@
+<div class="container">
+    <div>
+        <h2>Login</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="mb-3 user-name">
+                <input type="text" class="form-control" placeholder="Username" name="username"
+                    formControlName="username" autocomplete="username">
+                <div *ngIf="loginForm.get('username')?.dirty || formSubmitted">
+                    <span class="error" *ngIf="loginForm.get('username')?.hasError('required')">
+                        Username is Mandatory
+                    </span>
+                </div>
+            </div>
+            <div class="mb-3 password">
+                <input type="password" class="form-control" placeholder="Password" name="password"
+                    formControlName="password" autocomplete="current-password">
+                <div *ngIf="loginForm.get('password')?.dirty || formSubmitted">
+                    <span class="error" *ngIf="loginForm.get('password')?.hasError('required')">
+                        Password is Mandatory
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="message" style="margin-bottom: 10px;">
+                <span [ngClass]="{'error':hasError,'valid':!hasError}">
+                    {{message}}
+                </span>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
