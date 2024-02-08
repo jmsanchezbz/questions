@@ -8,19 +8,20 @@ import { QuestionFilterChange } from "../model/question-filter-change";
   providedIn: "root",
 })
 export class QuestionService {
+  readonly domain: string = "https://api.jmsanchez.eu";
   readonly basePath: string = "/api/questions";
 
   constructor(private http: HttpClient) {}
 
   findById(id: number): Observable<Question> {
-    console.log(`QuestionService.findById ${this.basePath}/${id}`);
+    console.log(`QuestionService.findById ${this.domain}${this.basePath}/${id}`);
 
-    return this.http.get<Question>(`${this.basePath}/${id}`);
+    return this.http.get<Question>(`${this.domain}${this.basePath}/${id}`);
   }
 
   findByParams(params: QuestionFilterChange): Observable<Question[]> {
     const filterParams = Object.keys(params).filter(
-      (key) => params[key] !== null && params[key] !== undefined
+      (key) => params[key] !== null && params[key] !== 'null' && params[key] !== undefined
     );
 
     const queryString = filterParams
@@ -30,16 +31,16 @@ export class QuestionService {
 
     console.log("---QuestionService.findByParams", params, queryString);
 
-    const path = queryString ? `${this.basePath}?${queryString}` : "";
+    const path = queryString ? `?${queryString}` : '';
 
-    return this.http.get<Question[]>(`${path}`, );
+    return this.http.get<Question[]>(`${this.domain}${this.basePath}${path}`, );
   }
 
   update(question: Question, code: string): Observable<Question> {
     let payload = {...question,'seccode':code}
     console.log(`---QuestionService.update`, payload);
 
-    return this.http.put<Question>(`${this.basePath}/${question.id}`, payload);
+    return this.http.put<Question>(`${this.domain}${this.basePath}/${question.id}`, payload);
   }
 }
 

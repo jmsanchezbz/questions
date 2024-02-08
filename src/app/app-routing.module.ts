@@ -3,11 +3,9 @@ import { RouterModule, Routes, provideRouter } from "@angular/router";
 import { QuestionRoutingModule } from "./question/question-routing.module";
 import { UserRoutingModule } from "./user/user-routing.module";
 import { ArticleRoutingModule } from "./article/article-routing.module";
-import { bootstrapApplication } from "@angular/platform-browser";
-import { AppComponent } from "./app.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "user/login", pathMatch: "full" },
+  { path: "", redirectTo: "question/list", pathMatch: "full" },
   {
     path: "article",
     loadChildren: () =>

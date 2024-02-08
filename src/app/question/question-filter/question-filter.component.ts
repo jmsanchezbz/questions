@@ -10,16 +10,18 @@ import { debounceTime, tap } from 'rxjs';
 })
 export class QuestionFilterComponent {
   public filterForm: FormGroup;
+  readonly FILTER_CHANGE: string = 'filter-change';
 
-  @Input() filter: QuestionFilterChange;
+  @Input() filter: QuestionFilterChange = {adm:'caib',grp:'a1',thm:1, verified:null};
   @Input() themes: number[];
   @Input() groups: string[];
   @Output() private filterChanged: EventEmitter<QuestionFilterChange>;
 
   constructor(private fb: FormBuilder) {
-    this.createForm();
+    this.loadInitialFilter()
+    this.createForm(this.filter);
     this.filterChanged = new EventEmitter<QuestionFilterChange>();
-    
+
     this.filterForm.valueChanges.pipe(
       debounceTime(500),
       tap((response)=>{console.log('Filter-change',response)})
@@ -28,16 +30,27 @@ export class QuestionFilterComponent {
     })
   }
 
-  createForm() {
+  loadInitialFilter() {
+    const item = localStorage.getItem(this.FILTER_CHANGE)
+
+    if(item !== null) {
+      this.filter = JSON.parse(item);
+    }
+  }
+
+  createForm(filter: QuestionFilterChange) {
     this.filterForm = this.fb.group({
-      adm: new FormControl('caib', [Validators.required]),
-      grp: new FormControl('a1', [Validators.required]),
-      thm: new FormControl(1, []),
-      verified: new FormControl(null, [])
+      adm: new FormControl(filter.adm, [Validators.required]),
+      grp: new FormControl(filter.grp, [Validators.required]),
+      thm: new FormControl(filter.thm, []),
+      verified: new FormControl(filter.verified, [])
     })
   }
 
   onSubmit() {
-    this.filterChanged.emit(this.filterForm.value);
+    localStorage.setItem(this.FILTER_CHANGE, JSON.stringify(this.filter));console.log(this.filter);
+    
+    this.filter = this.filterForm.value;
+    this.filterChanged.emit(this.filter);
   }
 }
