@@ -1,4 +1,9 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit } from "@angular/core";
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  OnInit,
+} from "@angular/core";
 import { Question } from "../../model/question";
 import {
   Observable,
@@ -12,7 +17,7 @@ import {
 } from "rxjs";
 import { QuestionService } from "../../services/question.service";
 import { QuestionFilterChange } from "../../model/question-filter-change";
-import { QuestionFilterComponent } from "../question-filter/question-filter.component";
+import { StorageService } from "../../services/storage.service";
 
 @Component({
   selector: "app-question-list",
@@ -20,49 +25,63 @@ import { QuestionFilterComponent } from "../question-filter/question-filter.comp
   styleUrl: "./question-list.component.css",
 })
 export class QuestionListComponent implements OnInit, AfterViewInit {
+  readonly FILTER_CHANGE: string = "filter-change";
+
   public questions$: Observable<Array<Question>>;
-  private filter: Subject<QuestionFilterChange> = new Subject();
+  public filter: QuestionFilterChange;
+  private filterSubject: Subject<QuestionFilterChange> = new Subject();
   public themes: number[] = Array(30)
     .fill(0)
     .map((_, index) => index + 1);
   public groups: string[] = ["a1", "a2"];
+  protected storageSvc: StorageService = new StorageService();
 
   constructor(private questionService: QuestionService) {}
 
   ngOnInit() {
-    this.questions$ = this.filter.pipe(
-      tap((filter) => {
-        console.log("---QuestionListComponent:ngOnInit()", filter);
+    console.log("QuestionList ngOnInit:", this.filter);
+
+    this.initFilter();
+
+    this.questions$ = this.filterSubject.pipe(
+      tap((filterSubject) => {
+        console.log("---QuestionListComponent:ngOnInit()", filterSubject);
       }),
-      startWith(this.filter),
+      startWith(this.filterSubject),
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap((filter: QuestionFilterChange) =>
-        this.questionService.findByParams(filter)
+      switchMap((filterSubject: QuestionFilterChange) =>
+        this.questionService.findByParams(filterSubject)
       ),
       share()
     );
   }
 
-  ngAfterViewInit(){
-    const changes : QuestionFilterChange = {
-      adm: 'caib',
-      grp: 'a1',
-      thm: 1,
-      verified: null,
-    };
+  ngAfterViewInit() {
+    this.filterSubject.next(this.filter);
+  }
 
-    console.log('---QuestionListComponent:ngAfterContentInit()', changes);
+  initFilter() {
+    const item = this.storageSvc.retrieve(this.FILTER_CHANGE);
 
-    this.filter.next(changes);
+    if (item != null) {
+      this.filter = item;
+    } else {
+      this.filter = {
+        adm: "caib",
+        grp: "a1",
+        thm: 1,
+        verified: null,
+      };
+    }
   }
 
   onFilterChanged(changes: QuestionFilterChange) {
-    console.log("----Question-list:onFilterChanged", changes);
-    this.filter.next(changes);
+    this.storageSvc.store(this.FILTER_CHANGE, changes);
+    this.filterSubject.next(changes);
   }
 
   reset() {
-    console.log("----- Question-list: reset");
+    this.storageSvc.reset();
   }
 }
