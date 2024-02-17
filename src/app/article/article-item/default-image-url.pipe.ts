@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'defaultImageUrl',
+    name: 'defaultImageUrl',
+    standalone: true,
 })
 export class DefaultImageUrlPipe implements PipeTransform {
 

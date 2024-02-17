@@ -1,19 +1,21 @@
 import { Component } from "@angular/core";
 import { Question } from "../../model/question";
 import { ActivatedRoute } from "@angular/router";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { QuestionService } from "../../services/question.service";
 import { catchError, of } from "rxjs";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-question-edit",
-  templateUrl: "./question-edit.component.html",
-  styleUrl: "./question-edit.component.css",
+    selector: "app-question-edit",
+    templateUrl: "./question-edit.component.html",
+    styleUrl: "./question-edit.component.css",
+    standalone: true,
+    imports: [
+        NgIf,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
 })
 export class QuestionEditComponent {
   public question: Question;

@@ -13,26 +13,24 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 
 @NgModule({
-  declarations: [
-    QuestionItemComponent,
-    QuestionListComponent,
-    QuestionDetailComponent,
-    QuestionFilterComponent,
-    QuestionEditComponent
-  ],
-  imports: [
-    CommonModule,
-    QuestionRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    QuestionService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiInterceptor,
-      multi: true,
-    }
-  ]
+    imports: [
+        CommonModule,
+        QuestionRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        QuestionItemComponent,
+        QuestionListComponent,
+        QuestionDetailComponent,
+        QuestionFilterComponent,
+        QuestionEditComponent
+    ],
+    providers: [
+        QuestionService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiInterceptor,
+            multi: true,
+        }
+    ]
 })
 export class QuestionModule { }

@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.css',
+    standalone: true,
+    imports: [RouterLink, NgIf]
 })
 export class MenuComponent {
 

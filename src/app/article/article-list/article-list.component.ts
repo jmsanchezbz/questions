@@ -11,10 +11,13 @@ import {
   share,
 } from "rxjs";
 import { query } from "@angular/animations";
+import { ArticleItemComponent } from "../article-item/article-item.component";
+import { NgFor, AsyncPipe } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
-  selector: "app-article-list",
-  template: `
+    selector: "app-article-list",
+    template: `
     <div class="search">
       <input
         type="text"
@@ -33,8 +36,8 @@ import { query } from "@angular/animations";
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .search {
         width: 600px;
         margin: 0 auto;
@@ -60,7 +63,14 @@ import { query } from "@angular/animations";
         border: 1px solid black;
       }
     `,
-  ],
+    ],
+    standalone: true,
+    imports: [
+        FormsModule,
+        NgFor,
+        ArticleItemComponent,
+        AsyncPipe,
+    ],
 })
 export class ArticleListComponent implements OnInit {
   //private
