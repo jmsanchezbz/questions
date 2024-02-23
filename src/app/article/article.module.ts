@@ -14,26 +14,24 @@ import { ArticleItemComponent } from './article-item/article-item.component';
 
 
 @NgModule({
-  declarations: [
-    ArticleListComponent,
-    ArticleNewReactiveComponent,
-    ArticleDetailComponent,
-    ArticleItemComponent,
-    DefaultImageUrlPipe
-  ],
-  imports: [
-    CommonModule,
-    ArticleRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    ArticleService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ArticleAppInterceptor,
-      multi: true,
-    }
-  ]
+    imports: [
+        CommonModule,
+        ArticleRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ArticleListComponent,
+        ArticleNewReactiveComponent,
+        ArticleDetailComponent,
+        ArticleItemComponent,
+        DefaultImageUrlPipe
+    ],
+    providers: [
+        ArticleService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ArticleAppInterceptor,
+            multi: true,
+        }
+    ]
 })
 export class ArticleModule { }

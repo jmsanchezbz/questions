@@ -9,19 +9,17 @@ import { UserService } from '../services/user.service';
 
 
 @NgModule({
-  declarations: [
-    LoginComponent,
-    RegisterComponent
-  ],
-  imports: [
-    CommonModule,
-    UserRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    UserStoreService,
-    UserService
-  ]
+    imports: [
+        CommonModule,
+        UserRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        LoginComponent,
+        RegisterComponent
+    ],
+    providers: [
+        UserStoreService,
+        UserService
+    ]
 })
 export class UserModule { }

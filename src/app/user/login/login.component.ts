@@ -1,19 +1,22 @@
 import { Component } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
+import { NgIf, NgClass } from "@angular/common";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrl: "./login.component.css",
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrl: "./login.component.css",
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgIf,
+        NgClass,
+    ],
 })
 export class LoginComponent {
   public loginForm: FormGroup;

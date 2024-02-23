@@ -3,17 +3,19 @@ import { Question } from "../../model/question";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { QuestionService } from "../../services/question.service";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-question-detail",
-  templateUrl: "./question-detail.component.html",
-  styleUrl: "./question-detail.component.css",
+    selector: "app-question-detail",
+    templateUrl: "./question-detail.component.html",
+    styleUrl: "./question-detail.component.css",
+    standalone: true,
+    imports: [
+        NgIf,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
 })
 export class QuestionDetailComponent {
   public question: Question;

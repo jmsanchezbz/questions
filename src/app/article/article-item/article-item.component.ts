@@ -10,12 +10,23 @@ import {
 import { Article } from "../../model/article";
 import { ArticleQuantityChange } from "../../model/article-quantity-change";
 import { ArticleService } from "../../services/article-service.service";
+import { DefaultImageUrlPipe } from "./default-image-url.pipe";
+import { NgClass, NgIf, CurrencyPipe } from "@angular/common";
+import { RouterLink } from "@angular/router";
 
 @Component({
-  selector: "app-article-item",
-  templateUrl: "./article-item.component.html",
-  styleUrl: "./article-item.component.css",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-article-item",
+    templateUrl: "./article-item.component.html",
+    styleUrl: "./article-item.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        RouterLink,
+        NgClass,
+        NgIf,
+        CurrencyPipe,
+        DefaultImageUrlPipe,
+    ],
 })
 export class ArticleItemComponent implements OnInit {
   @Input() article: Article;

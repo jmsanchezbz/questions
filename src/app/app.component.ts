@@ -13,12 +13,8 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private routerLogger: RouterLoggingService
-  ) {
-    //console.log('-------------------------------------------->',router.url);
-  }
+  ) {}
 
-  ngOnInit(): void {
-    //this.router.navigate(["/"]);
-  }
+  ngOnInit(): void {}
 
 }

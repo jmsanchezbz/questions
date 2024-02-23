@@ -3,11 +3,20 @@ import { Article } from "../../model/article";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { ArticleService } from "../../services/article-service.service";
+import { DefaultImageUrlPipe } from "../article-item/default-image-url.pipe";
+import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
 
 @Component({
-  selector: "app-article-detail",
-  templateUrl: "./article-detail.component.html",
-  styleUrl: "./article-detail.component.css",
+    selector: "app-article-detail",
+    templateUrl: "./article-detail.component.html",
+    styleUrl: "./article-detail.component.css",
+    standalone: true,
+    imports: [
+        NgIf,
+        AsyncPipe,
+        CurrencyPipe,
+        DefaultImageUrlPipe,
+    ],
 })
 export class ArticleDetailComponent implements OnInit {
   public article$: Observable<Article>;

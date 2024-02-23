@@ -18,11 +18,21 @@ import {
 import { QuestionService } from "../../services/question.service";
 import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
+import { QuestionItemComponent } from "../question-item/question-item.component";
+import { NgFor, AsyncPipe } from "@angular/common";
+import { QuestionFilterComponent } from "../question-filter/question-filter.component";
 
 @Component({
-  selector: "app-question-list",
-  templateUrl: "./question-list.component.html",
-  styleUrl: "./question-list.component.css",
+    selector: "app-question-list",
+    templateUrl: "./question-list.component.html",
+    styleUrl: "./question-list.component.css",
+    standalone: true,
+    imports: [
+        QuestionFilterComponent,
+        NgFor,
+        QuestionItemComponent,
+        AsyncPipe,
+    ],
 })
 export class QuestionListComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";

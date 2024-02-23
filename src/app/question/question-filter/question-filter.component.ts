@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { QuestionFilterChange } from '../../model/question-filter-change';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, tap } from 'rxjs';
+import { NgFor, UpperCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-question-filter',
-  templateUrl: './question-filter.component.html',
-  styleUrl: './question-filter.component.css'
+    selector: 'app-question-filter',
+    templateUrl: './question-filter.component.html',
+    styleUrl: './question-filter.component.css',
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgFor, UpperCasePipe]
 })
 export class QuestionFilterComponent {
   public filterForm: FormGroup;
