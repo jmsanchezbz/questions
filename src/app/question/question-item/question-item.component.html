@@ -2,20 +2,20 @@
     <h3><a routerLink="/question/edit/{{question.id}}">{{ question.number }}. </a><a routerLink="/question/{{question.id}}">{{ question.question }}</a></h3>
     <i *ngIf="question.verified" class="material-icons" style="color:lightgreen">done</i>
     <div>
-        <input id="answer1" name="answer" type="radio" />
-        <label for="answer1">A. {{ question.option1 }}</label>
+        <input id="{{question.id}}-answer1" name="answer" type="radio" />
+        <label for="{{question.id}}-answer1">A. {{ question.option1 }}</label>
     </div>
     <div>
-        <input id="answer2" name="answer" type="radio" />
-        <label for="answer2">B. {{ question.option2 }}</label>
+        <input id="{{question.id}}-answer2" name="answer" type="radio" />
+        <label for="{{question.id}}-answer2">B. {{ question.option2 }}</label>
     </div>
     <div>
-        <input id="answer3" name="answer" type="radio" />
-        <label for="answer3">C. {{ question.option3 }}</label>
+        <input id="{{question.id}}-answer3" name="answer" type="radio" />
+        <label for="{{question.id}}-answer3">C. {{ question.option3 }}</label>
     </div>
     <div>
-        <input id="answer4" name="answer" type="radio" />
-        <label for="answer4">D. {{ question.option4 }}</label>
+        <input id="{{question.id}}-answer4" name="answer" type="radio" />
+        <label for="{{question.id}}-answer4">D. {{ question.option4 }}</label>
     </div>
     <div class="icons">
         <i class="material-icons" style="color:lightblue" (click)="toggleShowAnswer()" *ngIf="question.answer">

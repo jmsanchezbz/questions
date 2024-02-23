@@ -14,11 +14,11 @@ export class AppComponent implements OnInit {
     private router: Router,
     private routerLogger: RouterLoggingService
   ) {
-    console.log('-------------------------------------------->',router.url);
+    //console.log('-------------------------------------------->',router.url);
   }
 
   ngOnInit(): void {
-    this.router.navigate(["/"]);
+    //this.router.navigate(["/"]);
   }
 
 }

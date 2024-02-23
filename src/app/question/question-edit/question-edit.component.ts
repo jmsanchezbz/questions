@@ -50,6 +50,7 @@ export class QuestionEditComponent {
       answer: new FormControl(this.question.answer, [Validators.required]),
       explanation: new FormControl(this.question.explanation, [
         Validators.required,
+        Validators.maxLength(1000),
       ]),
       verified: new FormControl(this.question.verified, []),
       seccode: new FormControl(null),
@@ -66,24 +67,21 @@ export class QuestionEditComponent {
     if (this.answerForm.valid) {
       this.feedback = "Valid form";
       this.question = { ...this.question, ...this.answerForm.value };
-      console.log("Valid answer form", this.question, this.answerForm.get('seccode').value);
 
       this.questionService
-        .update(this.question, this.answerForm.get('seccode').value)
+        .update(this.question, this.answerForm.get("seccode").value)
         .pipe(
           catchError((error) => {
-            console.log('QuestionEdit.submitAnswer error:',error);
-            
-            this.feedback = error.error.msg;
+            console.error("Error QuestionEdit.update:", error);
+
+            this.feedback = `Error ${error.error.msg}`;
             return of(error.error.msg);
           })
         )
         .subscribe((question: Question) => {
-          this.feedback = `Question id() succesfully updated`;
-          console.log('QuestionEdit.submitAnswer', question);
-          
+          this.feedback = `Question id(${question.id}) succesfully updated`;
+          console.log("QuestionEdit.submitAnswer", question);
         });
-
     } else {
       this.feedback = "Invalid form";
       console.log("Valid answer form");
