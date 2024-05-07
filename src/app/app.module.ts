@@ -8,6 +8,8 @@ import { MenuComponent } from "./templates/menu/menu.component";
 import { PreloadAllModules, RouterModule, RouterOutlet } from "@angular/router";
 import { RouterLoggingService } from "./services/router-logging.service";
 import { ApiInterceptor } from "./services/api.interceptor";
+import { AuthInterceptorService } from './shared/services/auth-interceptor.service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
     declarations: [AppComponent],
@@ -25,7 +27,13 @@ import { ApiInterceptor } from "./services/api.interceptor";
             useClass: ApiInterceptor,
             multi: true,
         },
-        RouterLoggingService
+        RouterLoggingService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true,
+        },
+        provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent],
 })
