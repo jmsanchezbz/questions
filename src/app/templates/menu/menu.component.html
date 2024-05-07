@@ -1,36 +1,97 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container container-fluid">
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarScroll"
-      aria-controls="navbarScroll"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul
-        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
-      >
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="/user/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/user/register">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/question/list">Questions list</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/article/create">Create article</a>
-        </li>
-        <li class="nav-item" *ngIf="isAuthenticated()">
-          <button class="nav-link" (click)="logout()" routerLink="/user/login">Logout</button>
-        </li>
-      </ul>
+<div>
+  <mat-toolbar color="primary">
+    <span class="menu-hor fill-remaining-space">
+      <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
+    </span>
+    <span class="menu-ver fill-remaining-space">
+      <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger"
+        (mouseover)="menuTrigger.openMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" [overlapTrigger]="false">
+        <span (mouseleave)="menuTrigger.closeMenu()">
+          <button mat-menu-item (click)="home()">
+            <mat-icon>home</mat-icon>
+            <span>Inicio</span>
+          </button>
+          <ng-container *ngIf="!isAuthenticated()">
+            <button mat-menu-item (click)="login()">
+              <mat-icon>login</mat-icon>
+              <span>Inicia sesión</span>
+            </button>
+            <button mat-menu-item (click)="register()">
+              <mat-icon>person_add_alt_1</mat-icon>
+              <span>Registro</span>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="isAuthenticated()">
+            <button mat-menu-item (click)="login()">
+              <mat-icon>format_list_bulleted</mat-icon>
+              <span>Temas</span>
+            </button>
+            <button mat-menu-item (click)="login()">
+              <mat-icon>format_list_numbered</mat-icon>
+              <span>Preguntas</span>
+            </button>
+            <button mat-menu-item (click)="login()">
+              <mat-icon>person</mat-icon>
+              <span>Perfil</span>
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Cierra sessión</span>
+            </button>
+          </ng-container>
+        </span>
+      </mat-menu>
+    </span>
+    <div class="menu-ver fill-remaining-space">
+      <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
     </div>
-  </div>
-</nav>
+    <div class="menu-hor">
+      <span>
+        <button mat-menu-item (click)="home()">
+          <span class="white">Inicio</span>
+        </button>
+      </span>
+      <ng-container *ngIf="!isAuthenticated()">
+        <span>
+          <button mat-menu-item (click)="login()">
+            <span class="white">Inicio sesión</span>
+          </button>
+        </span>
+        <span>
+          <button mat-menu-item (click)="register()">
+            <span class="white">Registro</span>
+          </button>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="isAuthenticated()">
+        <span>
+          <button mat-menu-item (click)="login()">
+            <mat-icon class="white">format_list_bulleted</mat-icon>
+            <span class="white">Temas</span>
+          </button>
+        </span>
+        <span>
+          <button mat-menu-item (click)="login()">
+            <mat-icon class="white">format_list_numbered</mat-icon>
+            <span class="white">Preguntas</span>
+          </button>
+        </span>
+        <span>
+          <button mat-menu-item (click)="profile()">
+            <mat-icon class="white">person</mat-icon>
+            <span class="white">Profile</span>
+          </button>
+        </span>
+        <span>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon class="white">logout</mat-icon>
+            <span class="white">Cierre sesión</span>
+          </button>
+        </span>
+      </ng-container>
+    </div>
+  </mat-toolbar>
+</div>

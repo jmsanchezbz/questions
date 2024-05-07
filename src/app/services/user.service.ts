@@ -15,24 +15,24 @@ export class UserService {
   register(username: string, password: string): Observable<any> {
     console.log(`register (${username},${password})`);
 
-    return this.http.post<any>("/api/user/register", {
+    return this.http.post<any>("/api/register", {
       username: username,
       password: password,
     });
   }
 
-  authenticate(username: string, password: string): Observable<any> {
-    console.log(`authenticate (${username},${password})`);
+  login(username: string, password: string): Observable<any> {
+    console.log(`login (${username},${password})`);
 
     return this.http
-      .post<any>("/api/user/login", {
+      .post<any>("/api/login", {
         username: username,
         password: password,
       })
       .pipe(
         tap((response) => {
-          console.log("UserService authenticate: ", response.token);
-          this.userStoreService.token = response.token;
+          console.log("UserService login: ", response.token);
+          this.userStoreService.token = response.acces_token;
         })
       );
   }
@@ -41,7 +41,9 @@ export class UserService {
     return this.userStoreService.token != null;
   }
 
-  logOut(): void {
+  logout(): Observable<any> {
+    console.log(`logout`);
     this.userStoreService.reset();
+    return this.http.post<any>("/api/logout", {})
   }
 }
