@@ -25,7 +25,7 @@ import { QuestionFilterComponent } from "../question-filter/question-filter.comp
 @Component({
     selector: "app-question-list",
     templateUrl: "./question-list.component.html",
-    styleUrl: "./question-list.component.css",
+    styleUrl: "./question-list.component.scss",
     standalone: true,
     imports: [
         QuestionFilterComponent,

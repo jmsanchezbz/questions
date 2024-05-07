@@ -11,7 +11,7 @@ import { NgIf } from "@angular/common";
 @Component({
     selector: "app-article-new-reactive",
     templateUrl: "./article-new-reactive.component.html",
-    styleUrl: "./article-new-reactive.component.css",
+    styleUrl: "./article-new-reactive.component.scss",
     standalone: true,
     imports: [
         NgIf,

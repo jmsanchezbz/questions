@@ -1,6 +1,51 @@
-/* You can add global styles to this file, and also import other style files */
+/* Base common styles in the project */
 
-img.img-fluid {
-  width: 100%;
-  height: auto;
+:root {
+  --main-color: #3f51b5;
+  --white: white;
+  --black: black;
+  --dark: #222222;
+}
+
+/* Reset */
+*,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+main {
+  flex: 1; /* Grow to fill remaining vertical space */
+  padding: 20px;
+}
+
+footer {
+  background-color: var(--main-color);
+  color: white;
+  padding: 30px;
+  margin-top: auto; /* Push footer to the bottom */
+}
+
+/* Reglas generales */
+body {
+  font-family: var(--sans-serif-font);
+  font-weight: 400;
+  color: var(--light-color);
 }

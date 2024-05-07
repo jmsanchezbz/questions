@@ -1,0 +1,28 @@
+ul {
+  margin: 0 auto;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.menu-ver {
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.menu-hor {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+  }
+}
+
+.white {
+  color: white !important;
+}

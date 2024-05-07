@@ -9,7 +9,7 @@ import { NgIf, NgClass } from "@angular/common";
 @Component({
     selector: "app-register",
     templateUrl: "./register.component.html",
-    styleUrl: "./register.component.css",
+    styleUrl: "./register.component.scss",
     standalone: true,
     imports: [
         FormsModule,

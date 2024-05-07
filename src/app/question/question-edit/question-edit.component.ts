@@ -9,7 +9,7 @@ import { NgIf } from "@angular/common";
 @Component({
     selector: "app-question-edit",
     templateUrl: "./question-edit.component.html",
-    styleUrl: "./question-edit.component.css",
+    styleUrl: "./question-edit.component.scss",
     standalone: true,
     imports: [
         NgIf,

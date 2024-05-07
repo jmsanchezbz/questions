@@ -9,7 +9,7 @@ import { NgIf, NgClass } from "@angular/common";
 @Component({
     selector: "app-login",
     templateUrl: "./login.component.html",
-    styleUrl: "./login.component.css",
+    styleUrl: "./login.component.scss",
     standalone: true,
     imports: [
         FormsModule,
@@ -51,7 +51,7 @@ export class LoginComponent {
       const password = this.loginForm.get("password").value;
 
       this.userService
-        .authenticate(username, password)
+        .login(username, password)
         .pipe(
           tap((response) => {
             console.log("---login-authenticate", response);
@@ -68,8 +68,6 @@ export class LoginComponent {
             if (response) {
               this.message = response.msg;
             }
-            //We could redirect to articles with this
-            //this.router.navigate(['article/list']);
           },
           error: (error) => {
             console.log("Subscribe: Login error: ", error);
@@ -89,6 +87,6 @@ export class LoginComponent {
   logout() {
     console.log("Login-logout");
 
-    this.userService.logOut();
+    this.userService.logout();
   }
 }

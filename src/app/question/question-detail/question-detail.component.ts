@@ -9,7 +9,7 @@ import { NgIf } from "@angular/common";
 @Component({
     selector: "app-question-detail",
     templateUrl: "./question-detail.component.html",
-    styleUrl: "./question-detail.component.css",
+    styleUrl: "./question-detail.component.scss",
     standalone: true,
     imports: [
         NgIf,

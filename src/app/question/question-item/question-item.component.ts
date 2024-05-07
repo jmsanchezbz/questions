@@ -6,7 +6,7 @@ import { RouterLink } from "@angular/router";
 @Component({
     selector: "app-question-item",
     templateUrl: "./question-item.component.html",
-    styleUrl: "./question-item.component.css",
+    styleUrl: "./question-item.component.scss",
     standalone: true,
     imports: [RouterLink, NgIf],
 })

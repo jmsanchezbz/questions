@@ -7,7 +7,7 @@ import { NgFor, UpperCasePipe } from '@angular/common';
 @Component({
     selector: 'app-question-filter',
     templateUrl: './question-filter.component.html',
-    styleUrl: './question-filter.component.css',
+    styleUrl: './question-filter.component.scss',
     standalone: true,
     imports: [FormsModule, ReactiveFormsModule, NgFor, UpperCasePipe]
 })

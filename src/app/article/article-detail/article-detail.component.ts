@@ -9,7 +9,7 @@ import { NgIf, AsyncPipe, CurrencyPipe } from "@angular/common";
 @Component({
     selector: "app-article-detail",
     templateUrl: "./article-detail.component.html",
-    styleUrl: "./article-detail.component.css",
+    styleUrl: "./article-detail.component.scss",
     standalone: true,
     imports: [
         NgIf,

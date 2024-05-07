@@ -17,7 +17,7 @@ import { RouterLink } from "@angular/router";
 @Component({
     selector: "app-article-item",
     templateUrl: "./article-item.component.html",
-    styleUrl: "./article-item.component.css",
+    styleUrl: "./article-item.component.scss",
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
