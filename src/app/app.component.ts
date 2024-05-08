@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, provideRouter } from "@angular/router";
 import { RouterLoggingService } from "./services/router-logging.service";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: "app-root",
@@ -13,8 +14,9 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private routerLogger: RouterLoggingService
-  ) {}
+  ) {
+    console.log("Production environment: " + environment.production);
+  }
 
   ngOnInit(): void {}
-
 }
