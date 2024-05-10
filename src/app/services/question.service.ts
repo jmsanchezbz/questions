@@ -3,20 +3,21 @@ import { Injectable } from "@angular/core";
 import { Question } from "../model/question";
 import { Observable } from "rxjs";
 import { QuestionFilterChange } from "../model/question-filter-change";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: "root",
 })
 export class QuestionService {
-  readonly domain: string = "https://api.jmsanchez.eu";
+  //readonly domain: string = "https://api.jmsanchez.eu";
   readonly basePath: string = "/api/questions";
 
   constructor(private http: HttpClient) {}
 
   findById(id: number): Observable<Question> {
-    console.log(`QuestionService.findById ${this.domain}${this.basePath}/${id}`);
+    console.log(`QuestionService.findById ${environment.apiUrl}${this.basePath}/${id}`);
 
-    return this.http.get<Question>(`${this.domain}${this.basePath}/${id}`);
+    return this.http.get<Question>(`${environment.apiUrl}${this.basePath}/${id}`);
   }
 
   findByParams(params: QuestionFilterChange): Observable<Question[]> {
@@ -33,14 +34,14 @@ export class QuestionService {
 
     const path = queryString ? `?${queryString}` : '';
 
-    return this.http.get<Question[]>(`${this.domain}${this.basePath}${path}`, );
+    return this.http.get<Question[]>(`${environment.apiUrl}${this.basePath}${path}`, );
   }
 
   update(question: Question, code: string): Observable<Question> {
     let payload = {...question,'seccode':code}
     console.log(`---QuestionService.update`, payload);
 
-    return this.http.put<Question>(`${this.domain}${this.basePath}/${question.id}`, payload);
+    return this.http.put<Question>(`${environment.apiUrl}${this.basePath}/${question.id}`, payload);
   }
 }
 

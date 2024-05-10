@@ -39,7 +39,6 @@ header {
 
 main {
   flex: 1; /* Grow to fill remaining vertical space */
-  padding: 20px;
 }
 
 footer {

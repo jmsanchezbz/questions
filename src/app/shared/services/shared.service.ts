@@ -28,7 +28,7 @@ export class SharedService {
     if (toastMsg) {
       if (validRequest) {
         toastMsg.className = 'show requestOk';
-        toastMsg.textContent = 'Form submitted successfully.';
+        toastMsg.textContent = 'Formulario enviado correctamente.';
         await this.wait(2500);
         toastMsg.className = toastMsg.className.replace('show', '');
       } else {

@@ -1,21 +1,62 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of, map, tap } from "rxjs";
+import {
+  Observable,
+  of,
+  map,
+  tap,
+  catchError,
+  throwError,
+  EMPTY,
+  timer,
+  switchMap,
+} from "rxjs";
 import { UserStoreService } from "./user-store.service";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class UserService {
+  private readonly tokenCheckInterval = 60000;
+
   constructor(
     private http: HttpClient,
     private userStoreService: UserStoreService
   ) {}
 
+  private checkTokenValidity(): Observable<boolean> {
+    return this.http
+      .get<boolean>(`${environment.apiUrl}/api/authenticated`)
+      .pipe(
+        tap((response) => {
+          console.log("Authorized login attempt");
+        }),
+        catchError((error) => {
+          if (error.status === 401) {
+            console.error("Unauthorized login attempt");
+            this.userStoreService.token = null;
+            return throwError(() => error);
+          } else {
+            return EMPTY;
+          }
+        })
+      );
+  }
+
+  public startTokenValidation(): Observable<boolean> {
+    return timer(0, this.tokenCheckInterval).pipe(
+      switchMap(() => {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>token validity timer");
+        return this.checkTokenValidity();
+      })
+    );
+  }
+
   register(username: string, password: string): Observable<any> {
     console.log(`register (${username},${password})`);
 
-    return this.http.post<any>("/api/register", {
+    return this.http.post<any>(`${environment.apiUrl}/api/register`, {
       username: username,
       password: password,
     });
@@ -25,7 +66,7 @@ export class UserService {
     console.log(`login (${username},${password})`);
 
     return this.http
-      .post<any>("/api/login", {
+      .post<any>(`${environment.apiUrl}/api/login`, {
         username: username,
         password: password,
       })
@@ -44,6 +85,6 @@ export class UserService {
   logout(): Observable<any> {
     console.log(`logout`);
     this.userStoreService.reset();
-    return this.http.post<any>("/api/logout", {})
+    return this.http.post<any>(`${environment.apiUrl}/api/logout`, {});
   }
 }
