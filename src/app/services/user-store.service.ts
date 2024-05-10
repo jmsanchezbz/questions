@@ -4,21 +4,19 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class UserStoreService {
-  readonly USER_TOKEN: string = 'userToken';
-  
-  constructor() {
-  }
+  private readonly USER_TOKEN: string = "userToken";
+
+  constructor() {}
 
   set token(token: string) {
     localStorage.setItem(this.USER_TOKEN, token);
-    //sessionStorage.setItem('userToken', token); //in session storage
   }
 
-  get token():string {
+  get token(): string {
     return localStorage.getItem(this.USER_TOKEN);
   }
 
   reset() {
-    localStorage.removeItem(this.USER_TOKEN);
+    localStorage.clear(); //removeItem(this.USER_TOKEN);
   }
 }

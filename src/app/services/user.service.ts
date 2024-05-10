@@ -72,14 +72,18 @@ export class UserService {
       })
       .pipe(
         tap((response) => {
-          console.log("UserService login: ", response.token);
-          this.userStoreService.token = response.acces_token;
+          console.log(
+            "UserService login: ",
+            response,
+            response.access_token
+          );
+          this.userStoreService.token = response.access_token;
         })
       );
   }
 
   isAuthenticated(): boolean {
-    return this.userStoreService.token != null;
+    return this.userStoreService.token != null && this.userStoreService.token != 'null';
   }
 
   logout(): Observable<any> {
