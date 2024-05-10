@@ -5,6 +5,10 @@ import { of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
 import { NgIf, NgClass } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
     selector: "app-login",
@@ -16,6 +20,10 @@ import { NgIf, NgClass } from "@angular/common";
         ReactiveFormsModule,
         NgIf,
         NgClass,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCardModule
     ],
 })
 export class LoginComponent {
@@ -31,7 +39,7 @@ export class LoginComponent {
   ) {
     console.log("LoginComponent");
     if (userService.isAuthenticated()) {
-      router.navigate(["article/create"]);
+      router.navigate([""]);
     }
     this.createForm();
   }

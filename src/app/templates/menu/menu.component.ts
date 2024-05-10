@@ -45,11 +45,20 @@ export class MenuComponent {
   }
 
   profile(): void {
-    console.log("Menu profile NOT IMPLEMENTED");
+    console.log("Menu login");
+    this.router.navigateByUrl("/user/register?user=0");
+  }
+  
+  questions(): void {
+    console.log("Menu questions NOT IMPLEMENTED");
   }
 
   register(): void {
     console.log("Menu register");
     this.router.navigateByUrl("/user/register");
+  }
+
+  themes(): void {
+    console.log("Menu themes NOT IMPLEMENTED");
   }
 }

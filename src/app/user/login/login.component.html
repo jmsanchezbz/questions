@@ -1,31 +1,30 @@
 <div class="container">
-    <div>
-        <h2>Login</h2>
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
-            <div class="mb-3 user-name">
-                <input type="text" class="form-control" placeholder="Username" name="username"
-                    formControlName="username" autocomplete="username">
-                <div *ngIf="loginForm.get('username')?.dirty || formSubmitted">
-                    <span class="error" *ngIf="loginForm.get('username')?.hasError('required')">
-                        Username is Mandatory
-                    </span>
-                </div>
-            </div>
-            <div class="mb-3 password">
-                <input type="password" class="form-control" placeholder="Password" name="password"
-                    formControlName="password" autocomplete="current-password">
-                <div *ngIf="loginForm.get('password')?.dirty || formSubmitted">
-                    <span class="error" *ngIf="loginForm.get('password')?.hasError('required')">
-                        Password is Mandatory
-                    </span>
-                </div>
-            </div>
-            <div *ngIf="message" style="margin-bottom: 10px;">
-                <span [ngClass]="{'error':hasError,'valid':!hasError}">
-                    {{message}}
-                </span>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+    <mat-card class="mat-elevation-z4">
+        <h1>Inicio de sesión</h1>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="my-form">
+            <section>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Usuario</mat-label>
+                    <input matInput type="text" formControlName="username" placeholder="Usuario" autocomplete="username"/>
+                    <mat-error *ngIf="loginForm.get('username')?.dirty || formSubmitted">
+                        <span *ngIf="loginForm.get('username')?.hasError('required')">El usuario es
+                            obligatorio</span>
+                    </mat-error>
+                </mat-form-field>
+            </section>
+            <section>
+                <mat-form-field appearence="fill" class="full-width">
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput type="password" formControlName="password" autocomplete="current-password" required />
+                    <mat-error *ngIf="loginForm.get('password')?.dirty || formSubmitted">
+                        <span *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es
+                            obligatoria</span>
+                    </mat-error>
+                </mat-form-field>
+            </section>
+            <section>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Inicia</button>
+            </section>
         </form>
-    </div>
+    </mat-card>
 </div>

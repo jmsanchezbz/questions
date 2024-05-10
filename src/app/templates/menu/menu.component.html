@@ -1,7 +1,9 @@
 <div>
   <mat-toolbar color="primary">
     <span class="menu-hor fill-remaining-space">
-      <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
+      <a [routerLink]="" (click)="home()">
+        <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
+      </a>
     </span>
     <span class="menu-ver fill-remaining-space">
       <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger"
@@ -10,10 +12,6 @@
       </button>
       <mat-menu #menu="matMenu" [overlapTrigger]="false">
         <span (mouseleave)="menuTrigger.closeMenu()">
-          <button mat-menu-item (click)="home()">
-            <mat-icon>home</mat-icon>
-            <span>Inicio</span>
-          </button>
           <ng-container *ngIf="!isAuthenticated()">
             <button mat-menu-item (click)="login()">
               <mat-icon>login</mat-icon>
@@ -25,15 +23,15 @@
             </button>
           </ng-container>
           <ng-container *ngIf="isAuthenticated()">
-            <button mat-menu-item (click)="login()">
-              <mat-icon>format_list_bulleted</mat-icon>
+            <button mat-menu-item (click)="themes()">
+              <mat-icon>format_list_numbered</mat-icon>
               <span>Temas</span>
             </button>
-            <button mat-menu-item (click)="login()">
-              <mat-icon>format_list_numbered</mat-icon>
+            <button mat-menu-item (click)="questions()">
+              <mat-icon>format_list_bulleted</mat-icon>
               <span>Preguntas</span>
             </button>
-            <button mat-menu-item (click)="login()">
+            <button mat-menu-item (click)="profile()">
               <mat-icon>person</mat-icon>
               <span>Perfil</span>
             </button>
@@ -46,22 +44,21 @@
       </mat-menu>
     </span>
     <div class="menu-ver fill-remaining-space">
-      <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
+      <a [routerLink]="" (click)="home()">
+        <img src="assets/images/logo-dark.png" alt="Logo questions" width="40">
+      </a>
     </div>
     <div class="menu-hor">
-      <span>
-        <button mat-menu-item (click)="home()">
-          <span class="white">Inicio</span>
-        </button>
-      </span>
       <ng-container *ngIf="!isAuthenticated()">
         <span>
           <button mat-menu-item (click)="login()">
-            <span class="white">Inicio sesión</span>
+            <mat-icon class="white">login</mat-icon>
+            <span class="white">Inicia sesión</span>
           </button>
         </span>
         <span>
           <button mat-menu-item (click)="register()">
+            <mat-icon class="white">person_add_alt_1</mat-icon>
             <span class="white">Registro</span>
           </button>
         </span>
@@ -69,13 +66,13 @@
       <ng-container *ngIf="isAuthenticated()">
         <span>
           <button mat-menu-item (click)="login()">
-            <mat-icon class="white">format_list_bulleted</mat-icon>
+            <mat-icon class="white">format_list_numbered</mat-icon>
             <span class="white">Temas</span>
           </button>
         </span>
         <span>
           <button mat-menu-item (click)="login()">
-            <mat-icon class="white">format_list_numbered</mat-icon>
+            <mat-icon class="white">format_list_bulleted</mat-icon>
             <span class="white">Preguntas</span>
           </button>
         </span>

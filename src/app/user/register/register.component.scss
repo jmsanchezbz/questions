@@ -1,12 +1,25 @@
+.my-form {
+  text-align: center;
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+mat-card {
+  padding: 30px;
+  min-width: 400px;
+  text-align: center;
+}
+
 .error {
-    color: red;
+  color: red;
 }
 
 .valid {
-    color: green;
+  color: green;
 }
 
 .container {
-    width: 400px;
-    margin: 0 auto;
+  width: 400px;
+  margin: 0 auto;
 }
