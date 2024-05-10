@@ -1,3 +1,4 @@
+import { _isNumberValue } from "@angular/cdk/coercion";
 import { NgIf } from "@angular/common";
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
@@ -14,6 +15,7 @@ export class CheckIndicatorComponent implements OnChanges {
   @Input() selected: number;
   @Input() answer: number;
 
+  show: Boolean = null;
   valid: Boolean = null;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -23,6 +25,10 @@ export class CheckIndicatorComponent implements OnChanges {
   }
 
   private updateValidity() {
+    this.show =
+      this.answer &&
+      this.selected == this.option;
     this.valid = this.option === this.selected && this.selected === this.answer;
+    console.log("show-valdid", this.show, this.valid);
   }
 }
