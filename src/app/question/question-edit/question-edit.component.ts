@@ -71,7 +71,7 @@ export class QuestionEditComponent {
       this.question = { ...this.question, ...this.answerForm.value };
 
       this.questionService
-        .update(this.question, this.answerForm.get("seccode").value)
+        .update(this.question)
         .pipe(
           catchError((error) => {
             console.error("Error QuestionEdit.update:", error);
