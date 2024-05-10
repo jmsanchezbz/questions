@@ -10,14 +10,14 @@ import { environment } from '../../environments/environment';
 })
 export class QuestionService {
   //readonly domain: string = "https://api.jmsanchez.eu";
-  readonly basePath: string = "/api/questions";
+  readonly basePath: string = `${environment.apiUrl}/api/questions`;
 
   constructor(private http: HttpClient) {}
 
   findById(id: number): Observable<Question> {
-    console.log(`QuestionService.findById ${environment.apiUrl}${this.basePath}/${id}`);
+    console.log(`QuestionService.findById ${this.basePath}/${id}`);
 
-    return this.http.get<Question>(`${environment.apiUrl}${this.basePath}/${id}`);
+    return this.http.get<Question>(`${this.basePath}/${id}`);
   }
 
   findByParams(params: QuestionFilterChange): Observable<Question[]> {
@@ -34,14 +34,13 @@ export class QuestionService {
 
     const path = queryString ? `?${queryString}` : '';
 
-    return this.http.get<Question[]>(`${environment.apiUrl}${this.basePath}${path}`, );
+    return this.http.get<Question[]>(`${this.basePath}${path}`, );
   }
 
-  update(question: Question, code: string): Observable<Question> {
-    let payload = {...question,'seccode':code}
-    console.log(`---QuestionService.update`, payload);
+  update(question: Question): Observable<Question> {
+    console.log(`---QuestionService.update`, question);
 
-    return this.http.put<Question>(`${environment.apiUrl}${this.basePath}/${question.id}`, payload);
+    return this.http.put<Question>(`${this.basePath}/${question.id}`, question);
   }
 }
 

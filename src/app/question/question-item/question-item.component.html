@@ -1,7 +1,7 @@
 <div class="question">
     <h4><label id="radio-group-label">{{question.number}}.
             <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
-            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()" aria-label="Ayuda">help</mat-icon></h4>
+            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()" *ngIf="question.answer" aria-label="Ayuda">help</mat-icon></h4>
     <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected">
         <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
             A. {{ question.option1 }}<app-check-indicator [option]="1" [answer]="question.answer"
