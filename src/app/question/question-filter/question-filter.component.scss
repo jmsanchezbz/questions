@@ -1,5 +1,15 @@
 form {
-    border: 1px solid lightgray;
-    padding: 10px;
-    margin-bottom: 20px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+mat-form-field {
+    margin-right: 5px;
 }

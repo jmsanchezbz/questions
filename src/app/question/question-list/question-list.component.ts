@@ -90,8 +90,4 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
     this.storageSvc.store(this.FILTER_CHANGE, changes);
     this.filterSubject.next(changes);
   }
-
-  reset() {
-    this.storageSvc.reset();
-  }
 }

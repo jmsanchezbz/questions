@@ -3,13 +3,15 @@ import { QuestionFilterChange } from '../../model/question-filter-change';
 import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, tap } from 'rxjs';
 import { NgFor, UpperCasePipe } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-question-filter',
     templateUrl: './question-filter.component.html',
     styleUrl: './question-filter.component.scss',
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, NgFor, UpperCasePipe]
+    imports: [FormsModule, ReactiveFormsModule, NgFor, UpperCasePipe, MatFormFieldModule, MatSelectModule]
 })
 export class QuestionFilterComponent {
   public filterForm: FormGroup;
