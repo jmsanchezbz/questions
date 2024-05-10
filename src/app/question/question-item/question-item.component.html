@@ -1,31 +1,19 @@
 <div class="question">
-    <h3><a routerLink="/question/edit/{{question.id}}">{{ question.number }}. </a><a routerLink="/question/{{question.id}}">{{ question.question }}</a></h3>
-    <i *ngIf="question.verified" class="material-icons" style="color:lightgreen">done</i>
-    <div>
-        <input id="{{question.id}}-answer1" name="answer" type="radio" />
-        <label for="{{question.id}}-answer1">A. {{ question.option1 }}</label>
-    </div>
-    <div>
-        <input id="{{question.id}}-answer2" name="answer" type="radio" />
-        <label for="{{question.id}}-answer2">B. {{ question.option2 }}</label>
-    </div>
-    <div>
-        <input id="{{question.id}}-answer3" name="answer" type="radio" />
-        <label for="{{question.id}}-answer3">C. {{ question.option3 }}</label>
-    </div>
-    <div>
-        <input id="{{question.id}}-answer4" name="answer" type="radio" />
-        <label for="{{question.id}}-answer4">D. {{ question.option4 }}</label>
-    </div>
-    <div class="icons">
-        <i class="material-icons" style="color:lightblue" (click)="toggleShowAnswer()" *ngIf="question.answer">
-            help
-        </i>
-    </div>
-    <div class="answer" *ngIf="showAnswer">
-        <hr />
-        <b>Resposta</b><br />
-        <label>{{ question.answer }}</label>
-        <label>{{ question.explanation }}</label>
-    </div>
+    <h4><label id="radio-group-label">{{question.number}}.
+            <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
+            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()" aria-label="Ayuda">help</mat-icon></h4>
+    <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected">
+        <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
+            A. {{ question.option1 }}<app-check-indicator [option]="1" [answer]="question.answer"
+                [selected]="selected"></app-check-indicator></mat-radio-button>
+        <mat-radio-button id="{{question.id}}-o2" class="radio-button" [value]="2">
+            B. {{ question.option2 }}<app-check-indicator [option]="2" [answer]="question.answer"
+                [selected]="selected"></app-check-indicator></mat-radio-button>
+        <mat-radio-button id="{{question.id}}-o3" class="radio-button" [value]="3">
+            C. {{ question.option3 }}<app-check-indicator [option]="3" [answer]="question.answer"
+                [selected]="selected"></app-check-indicator></mat-radio-button>
+        <mat-radio-button id="{{question.id}}-o4" class="radio-button" [value]="4">
+            D. {{ question.option4 }}<app-check-indicator [option]="4" [answer]="question.answer"
+                [selected]="selected"></app-check-indicator></mat-radio-button>
+    </mat-radio-group>
 </div>
