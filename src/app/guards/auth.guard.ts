@@ -13,10 +13,10 @@ export const canActivateFn: CanActivateFn = () => {
   
 
   if (userService.isAuthenticated()) {
-    console.log('---OK AuthGuard-canActivateFn');
+    console.log('AuthGuard-canActivateFn true');
     return true;
   }
-  console.log('---KO AuthGuard-canActivateFn');
+  console.log('AuthGuard-canActivateFn false');
 
   return router.createUrlTree(["/user/login"]);
 };

@@ -2,7 +2,8 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes, provideRouter } from "@angular/router";
 import { QuestionRoutingModule } from "./question/question-routing.module";
 import { UserRoutingModule } from "./user/user-routing.module";
-import { TrialRoutingModule } from './trial/trial-routing.module';
+import { TrialRoutingModule } from "./trial/trial-routing.module";
+import { canActivateFn } from "./guards/auth.guard";
 
 const routes: Routes = [
   { path: "", redirectTo: "question/list", pathMatch: "full" },
@@ -15,6 +16,7 @@ const routes: Routes = [
     path: "trial",
     loadChildren: () =>
       import("./trial/trial.module").then((m) => m.TrialModule),
+    canActivate: [canActivateFn],
   },
   {
     path: "user",
@@ -22,7 +24,9 @@ const routes: Routes = [
   },
   {
     path: "stats",
-    loadChildren: () => import("./stats/stats.module").then((m) => m.StatsModule),
+    loadChildren: () =>
+      import("./stats/stats.module").then((m) => m.StatsModule),
+    canActivate: [canActivateFn],
   },
   { path: "**", redirectTo: "user/login" },
 ];
@@ -32,7 +36,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     QuestionRoutingModule,
     UserRoutingModule,
-    TrialRoutingModule
+    TrialRoutingModule,
   ],
   exports: [RouterModule],
 })
