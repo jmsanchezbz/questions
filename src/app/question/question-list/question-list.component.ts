@@ -23,16 +23,11 @@ import { NgFor, AsyncPipe } from "@angular/common";
 import { QuestionFilterComponent } from "../question-filter/question-filter.component";
 
 @Component({
-    selector: "app-question-list",
-    templateUrl: "./question-list.component.html",
-    styleUrl: "./question-list.component.scss",
-    standalone: true,
-    imports: [
-        QuestionFilterComponent,
-        NgFor,
-        QuestionItemComponent,
-        AsyncPipe,
-    ],
+  selector: "app-question-list",
+  templateUrl: "./question-list.component.html",
+  styleUrl: "./question-list.component.scss",
+  standalone: true,
+  imports: [QuestionFilterComponent, NgFor, QuestionItemComponent, AsyncPipe],
 })
 export class QuestionListComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";
@@ -44,9 +39,11 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
     .fill(0)
     .map((_, index) => index + 1);
   public groups: string[] = ["a1", "a2"];
-  protected storageSvc: StorageService = new StorageService();
 
-  constructor(private questionService: QuestionService) {}
+  constructor(
+    private questionService: QuestionService,
+    private storageSvc: StorageService
+  ) {}
 
   ngOnInit() {
     console.log("QuestionList ngOnInit:", this.filter);
