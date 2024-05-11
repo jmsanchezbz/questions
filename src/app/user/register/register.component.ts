@@ -20,6 +20,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
+import { HttpErrorResponse } from "@angular/common/http";
+import { SharedService } from "../../shared/services/shared.service";
+import { Profile } from "../../model/profile";
 
 @Component({
   selector: "app-register",
@@ -41,14 +44,16 @@ export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   formSubmitted = false;
   public message: string = "";
-  hasError: boolean = false;
   private userId: number;
+  private responseOK: boolean;
+  private errorResponse: any;
 
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sharedService: SharedService
   ) {
     console.log(
       "RegisterComponent",
@@ -59,10 +64,10 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-   this.route.queryParamMap.subscribe((params) => {
-    //this.userId = parseInt(params.get("user"), 10);
-    console.log("888------------>", params,params.get('user'));
-  });
+    this.route.queryParamMap.subscribe((params) => {
+      //this.userId = parseInt(params.get("user"), 10);
+      console.log("888------------>", params, params.get("user"));
+    });
 
     this.route.queryParams.subscribe((params) => {
       //this.userId = parseInt(params.get("user"), 10);
@@ -95,38 +100,54 @@ export class RegisterComponent implements OnInit {
     this.formSubmitted = true;
 
     if (this.registerForm.valid) {
-      const username = this.registerForm.get("username").value;
-      const password = this.registerForm.get("password").value;
+      const profile = new Profile(
+        0,
+        this.registerForm.get("name").value,
+        this.registerForm.get("username").value,
+        this.registerForm.get("email").value,
+        this.registerForm.get("password").value
+      );
+      const { id, ...reg } = profile;
 
       this.userService
-        .register(username, password)
+        .register(profile)
         .pipe(
           tap((response) => {
-            console.log("---login-authenticate", response);
+            console.log("RegisterComponent-register", response);
           }),
           catchError((error) => {
-            console.log("---Error: login-authenticate", error);
+            console.error("RegisterComponent-register", error);
             this.message = error.error.msg;
             throw error;
           })
         )
         .subscribe({
           next: (response) => {
-            console.log("---login response: ", response);
-            this.hasError = false;
+            console.log("RegisterComponent-register: ", response);
+            this.responseOK = true;
             if (response) {
               this.message = response.msg;
             }
-            //We could redirect to login with this
-            this.router.navigate(["user/login"]);
           },
-          error: (error) => {
-            console.log("Login error: ", error);
+          error: (error: HttpErrorResponse) => {
+            console.error("RegisterComponent-register: ", error);
             this.message = error.error.msg;
-            this.hasError = true;
+            this.errorResponse = error.error;
+            this.responseOK = false;
             throw error;
           },
-          complete: () => console.info("login->complete"),
+          complete: async () => {
+            console.info("RegisterComponent-register->complete");
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
+
+            if (this.responseOK) {
+              this.router.navigate(["user/login"]);
+            }
+          },
         });
     }
   }
