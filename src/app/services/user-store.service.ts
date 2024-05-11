@@ -17,6 +17,6 @@ export class UserStoreService {
   }
 
   reset() {
-    localStorage.clear(); //removeItem(this.USER_TOKEN);
+    localStorage.removeItem(this.USER_TOKEN);
   }
 }

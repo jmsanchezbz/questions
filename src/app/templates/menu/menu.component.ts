@@ -45,12 +45,8 @@ export class MenuComponent {
   }
 
   profile(): void {
-    console.log("Menu login");
+    console.log("Menu profile");
     this.router.navigateByUrl("/user/register?user=0");
-  }
-  
-  questions(): void {
-    console.log("Menu questions NOT IMPLEMENTED");
   }
 
   register(): void {
@@ -60,5 +56,11 @@ export class MenuComponent {
 
   themes(): void {
     console.log("Menu themes NOT IMPLEMENTED");
+
+    this.router.navigateByUrl("/trial/themes");
+  }
+
+  trials(): void {
+    this.router.navigate(["/trial/list"]);
   }
 }

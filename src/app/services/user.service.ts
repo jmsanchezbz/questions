@@ -13,6 +13,8 @@ import {
 } from "rxjs";
 import { UserStoreService } from "./user-store.service";
 import { environment } from "../../environments/environment";
+import { SharedService } from "../shared/services/shared.service";
+import { Profile } from "../model/profile";
 
 @Injectable({
   providedIn: "root",
@@ -22,44 +24,66 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private userStoreService: UserStoreService
+    private userStoreService: UserStoreService,
+    private sharedService: SharedService
   ) {}
 
   private checkTokenValidity(): Observable<boolean> {
-    return this.http
-      .get<boolean>(`${environment.apiUrl}/api/authenticated`)
-      .pipe(
-        tap((response) => {
-          console.log("Authorized login attempt");
-        }),
-        catchError((error) => {
-          if (error.status === 401) {
-            console.error("Unauthorized login attempt");
-            this.userStoreService.token = null;
-            return throwError(() => error);
-          } else {
-            return EMPTY;
-          }
-        })
-      );
-  }
-
-  public startTokenValidation(): Observable<boolean> {
-    return timer(0, this.tokenCheckInterval).pipe(
-      switchMap(() => {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>token validity timer");
-        return this.checkTokenValidity();
+    return this.http.get<any>(`${environment.apiUrl}/api/authenticated`).pipe(
+      tap((response) => {
+        console.log("UserService-CheckTokenValidity Authorized login attempt");
+        if (response.authenticated == true) {
+          return of(true);
+        } else {
+          return of(false);
+        }
+      }),
+      catchError((error) => {
+        console.error("UserService-CheckTokenValidity: ", error);
+        return of(false);
       })
     );
   }
 
-  register(username: string, password: string): Observable<any> {
-    console.log(`register (${username},${password})`);
+  public startTokenValidation(): void {
+    timer(0, this.tokenCheckInterval)
+      .pipe(
+        switchMap(() => {
+          console.log("StartTokenValidation timer");
+          if (this.userStoreService.token) {
+            return this.checkTokenValidity();
+          } else {
+            return of(false);
+          }
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          console.log("UserService-startTokenValidation: ", response);
+          if (!response) {
+            this.userStoreService.reset();
+          }
+        },
+        error: (error) => {
+          console.error("UserService-startTokenValidation: ", error);
+          throw error;
+        },
+        complete: () =>
+          console.info("UserService-startTokenValidation->complete"),
+      });
+  }
 
-    return this.http.post<any>(`${environment.apiUrl}/api/register`, {
-      username: username,
-      password: password,
-    });
+  register(profile: Profile): Observable<any> {
+    console.log(`UserService-register `, profile);
+
+    return this.http
+      .post<any>(`${environment.apiUrl}/api/register`, {
+        name: profile.name,
+        username: profile.username,
+        password: profile.password,
+        email: profile.email,
+      })
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   login(username: string, password: string): Observable<any> {
@@ -72,23 +96,25 @@ export class UserService {
       })
       .pipe(
         tap((response) => {
-          console.log(
-            "UserService login: ",
-            response,
-            response.access_token
-          );
+          console.log("UserService login: ", response, response.access_token);
           this.userStoreService.token = response.access_token;
-        })
+        }),
+        catchError(this.sharedService.handleError)
       );
   }
 
   isAuthenticated(): boolean {
-    return this.userStoreService.token != null && this.userStoreService.token != 'null';
+    return (
+      this.userStoreService.token != null &&
+      this.userStoreService.token != "null"
+    );
   }
 
   logout(): Observable<any> {
     console.log(`logout`);
     this.userStoreService.reset();
-    return this.http.post<any>(`${environment.apiUrl}/api/logout`, {});
+    return this.http
+      .post<any>(`${environment.apiUrl}/api/logout`, {})
+      .pipe(catchError(this.sharedService.handleError));
   }
 }

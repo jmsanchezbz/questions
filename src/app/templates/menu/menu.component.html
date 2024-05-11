@@ -27,9 +27,9 @@
               <mat-icon>format_list_numbered</mat-icon>
               <span>Temas</span>
             </button>
-            <button mat-menu-item (click)="questions()">
+            <button mat-menu-item (click)="trials()">
               <mat-icon>format_list_bulleted</mat-icon>
-              <span>Preguntas</span>
+              <span>Exámenes</span>
             </button>
             <button mat-menu-item (click)="profile()">
               <mat-icon>person</mat-icon>
@@ -65,21 +65,21 @@
       </ng-container>
       <ng-container *ngIf="isAuthenticated()">
         <span>
-          <button mat-menu-item (click)="login()">
+          <button mat-menu-item (click)="themes()">
             <mat-icon class="white">format_list_numbered</mat-icon>
             <span class="white">Temas</span>
           </button>
         </span>
         <span>
-          <button mat-menu-item (click)="login()">
+          <button mat-menu-item (click)="trials()">
             <mat-icon class="white">format_list_bulleted</mat-icon>
-            <span class="white">Preguntas</span>
+            <span class="white">Exámenes</span>
           </button>
         </span>
         <span>
           <button mat-menu-item (click)="profile()">
             <mat-icon class="white">person</mat-icon>
-            <span class="white">Profile</span>
+            <span class="white">Perfil</span>
           </button>
         </span>
         <span>

@@ -29,6 +29,5 @@ export class CheckIndicatorComponent implements OnChanges {
       this.answer &&
       this.selected == this.option;
     this.valid = this.option === this.selected && this.selected === this.answer;
-    console.log("show-valdid", this.show, this.valid);
   }
 }
