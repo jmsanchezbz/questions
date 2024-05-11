@@ -39,7 +39,7 @@ export class QuestionItemComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      console.log(`QuestionItem-openDialog: ${result}`);
     });
   }
 

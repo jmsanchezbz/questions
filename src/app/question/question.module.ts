@@ -8,8 +8,6 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
 import { QuestionService } from '../services/question.service';
 import { QuestionFilterComponent } from './question-filter/question-filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ApiInterceptor } from '../services/api.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 
 @NgModule({
@@ -26,11 +24,6 @@ import { QuestionEditComponent } from './question-edit/question-edit.component';
     ],
     providers: [
         QuestionService,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ApiInterceptor,
-            multi: true,
-        }
     ]
 })
 export class QuestionModule { }

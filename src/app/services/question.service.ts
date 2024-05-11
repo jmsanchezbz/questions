@@ -1,23 +1,25 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Question } from "../model/question";
-import { Observable } from "rxjs";
+import { catchError, Observable } from "rxjs";
 import { QuestionFilterChange } from "../model/question-filter-change";
 import { environment } from '../../environments/environment';
+import { SharedService } from '../shared/services/shared.service';
 
 @Injectable({
   providedIn: "root",
 })
 export class QuestionService {
-  //readonly domain: string = "https://api.jmsanchez.eu";
+  
   readonly basePath: string = `${environment.apiUrl}/api/questions`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sharedService: SharedService) {}
 
   findById(id: number): Observable<Question> {
     console.log(`QuestionService.findById ${this.basePath}/${id}`);
 
-    return this.http.get<Question>(`${this.basePath}/${id}`);
+    return this.http.get<Question>(`${this.basePath}/${id}`)
+    .pipe(catchError(this.sharedService.handleError));
   }
 
   findByParams(params: QuestionFilterChange): Observable<Question[]> {
@@ -34,13 +36,15 @@ export class QuestionService {
 
     const path = queryString ? `?${queryString}` : '';
 
-    return this.http.get<Question[]>(`${this.basePath}${path}`, );
+    return this.http.get<Question[]>(`${this.basePath}${path}`, )
+    .pipe(catchError(this.sharedService.handleError));
   }
 
   update(question: Question): Observable<Question> {
     console.log(`---QuestionService.update`, question);
 
-    return this.http.put<Question>(`${this.basePath}/${question.id}`, question);
+    return this.http.put<Question>(`${this.basePath}/${question.id}`, question)
+    .pipe(catchError(this.sharedService.handleError));
   }
 }
 
