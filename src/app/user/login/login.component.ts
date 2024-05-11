@@ -1,5 +1,12 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Router } from "@angular/router";
 import { of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
@@ -9,33 +16,37 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
+import { SharedService } from "../../shared/services/shared.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-    selector: "app-login",
-    templateUrl: "./login.component.html",
-    styleUrl: "./login.component.scss",
-    standalone: true,
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgIf,
-        NgClass,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule
-    ],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrl: "./login.component.scss",
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgIf,
+    NgClass,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+  ],
 })
 export class LoginComponent {
   public loginForm: FormGroup;
   formSubmitted = false;
   message: string;
-  hasError: boolean = false;
+  private responseOK: boolean;
+  private errorResponse: any;
 
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) {
     console.log("LoginComponent");
     if (userService.isAuthenticated()) {
@@ -51,7 +62,7 @@ export class LoginComponent {
     });
   }
 
-  login() {
+  async login() {
     this.formSubmitted = true;
 
     if (this.loginForm.valid) {
@@ -71,19 +82,31 @@ export class LoginComponent {
         )
         .subscribe({
           next: (response) => {
-            console.log("---login response: ", response);
-            this.hasError = false;
+            console.log("Login-login response: ", response);
+            this.responseOK = true;
             if (response) {
               this.message = response.msg;
             }
           },
-          error: (error) => {
-            console.log("Subscribe: Login error: ", error);
+          error: (error: HttpErrorResponse) => {
+            console.error("Login error: ", error);
             this.message = error.error.msg;
-            this.hasError = true;
+            this.errorResponse = error.error;
+            this.responseOK = false;
             throw error;
           },
-          complete: () => console.info("login->complete"),
+          complete: async () => {
+            console.info("login->complete");
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
+            
+            if (this.responseOK) {
+              this.router.navigate([""]);
+            }
+          },
         });
     }
   }
