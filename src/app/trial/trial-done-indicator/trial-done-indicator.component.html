@@ -1,0 +1,4 @@
+{{perErrors}}%
+<mat-icon *ngIf="perErrors<20" class="green">gpp_good</mat-icon>
+<mat-icon *ngIf="perErrors>=20 && perErrors<=60" class="yellow">gpp_maybe</mat-icon>
+<mat-icon *ngIf="perErrors>60" class="red">gpp_bad</mat-icon>
