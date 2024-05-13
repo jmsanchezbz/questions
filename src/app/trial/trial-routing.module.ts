@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: ":id",
     component: TrialItemComponent,
-    resolve: { Trial: trialLoadResolveFn },
+    resolve: { trial: trialLoadResolveFn },
     canActivate: [canActivateFn],
   },
 ];

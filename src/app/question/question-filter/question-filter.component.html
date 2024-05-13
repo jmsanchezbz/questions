@@ -16,7 +16,7 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="hideTheme">
         <mat-label>Tema</mat-label>
         <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
             <mat-option disabled value="">Selecciona</mat-option>
@@ -25,7 +25,7 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="hideTheme">
         <mat-label>Verificadas</mat-label>
         <mat-select id="cbxVerified" name="cbxVerified" formControlName="verified">
             <mat-option value="null">Todas</mat-option>

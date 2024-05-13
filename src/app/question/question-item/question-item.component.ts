@@ -1,6 +1,13 @@
-import { Component, Input, NgModule } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgModule,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { Question } from "../../model/question";
-import { NgIf } from "@angular/common";
+import { NgClass, NgIf } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatRadioModule } from "@angular/material/radio";
 import { FormsModule } from "@angular/forms";
@@ -8,6 +15,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { CheckIndicatorComponent } from "../../shared/components/check-indicator/check-indicator.component";
 import { QuestionDlgComponent } from "../../shared/components/question-dlg/question-dlg.component";
+import { TrialQuestion } from "../../model/trial-question";
 
 @Component({
   selector: "app-question-item",
@@ -21,17 +29,31 @@ import { QuestionDlgComponent } from "../../shared/components/question-dlg/quest
     MatRadioModule,
     MatIconModule,
     CheckIndicatorComponent,
+    NgClass,
   ],
 })
-export class QuestionItemComponent {
-  @Input() question: Question;
+export class QuestionItemComponent implements OnInit {
+  @Input() tQuestion: TrialQuestion;
+  @Input() index: number;
+  @Input() trialCompleted: boolean = false;
+  @Output() private answerSelected: EventEmitter<TrialQuestion>;
 
+  myIndex: number;
+  question: Question;
   valid: Boolean = null;
 
   public showAnswer: boolean = false;
   selected: number = null;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+    this.answerSelected = new EventEmitter<TrialQuestion>();
+  }
+
+  ngOnInit(): void {
+    this.selected = this.tQuestion.answer ? this.tQuestion.answer : null;
+    this.question = this.tQuestion.question;
+    this.myIndex = this.index == -1 ? this.question.number : this.index + 1;
+  }
 
   openDialog() {
     const dialogRef = this.dialog.open(QuestionDlgComponent, {
@@ -45,5 +67,20 @@ export class QuestionItemComponent {
 
   toggleShowAnswer() {
     this.showAnswer = !this.showAnswer;
+  }
+
+  updateTQ() {
+    if (!this.trialCompleted && this.tQuestion.id != 0) {
+      this.tQuestion.answer = this.selected;
+      this.tQuestion.is_right = this.selected == this.tQuestion.question.answer;
+      console.log(
+        "--------updateTQ",
+        this.selected,
+        this.tQuestion.question.answer,
+        this.selected == this.tQuestion.question.answer
+      );
+
+      this.answerSelected.emit(this.tQuestion);
+    }
   }
 }

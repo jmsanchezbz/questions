@@ -1,4 +1,7 @@
 <div>
+    <div class="container">
+        <h1>Questions</h1>
+    </div>
     <!-- new question form -->
     <div class="filter-form">
         <app-question-filter (filterChanged)="onFilterChanged($event)" [themes]="themes" [groups]="groups"
@@ -7,9 +10,8 @@
 
     <!-- question list -->
     <div class="question-list">
-        <!--<p>You have {{ totalCount }} questions left to do.</--p>-->
-        <div *ngFor="let question of questions$ | async; index as id">
-            <app-question-item [question]="question"></app-question-item>
+        <div *ngFor="let tQuestion of tQuestions$ | async; index as id">
+            <app-question-item [index]="-1" [tQuestion]="tQuestion" [trialCompleted]="true"></app-question-item>
         </div>
     </div>
 </div>

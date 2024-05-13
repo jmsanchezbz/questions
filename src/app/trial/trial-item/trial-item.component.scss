@@ -1,0 +1,16 @@
+.filter-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-list {
+  @media (min-width: 1024px) {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+mat-form-field {
+  margin-right: 5px;
+}

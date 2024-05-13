@@ -30,13 +30,14 @@
             <mat-label>Temas</mat-label>
             <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
                 <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option value="caib">CAIB</mat-option>
-                <mat-option value="local">Local</mat-option>
+                <mat-option *ngFor="let theme of themes; index as i" [value]="theme">
+                    Tema {{ theme }}
+                </mat-option>
             </mat-select>
         </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-button cdkFocusInitial (click)="close()">Salir</button>
+        <button mat-button cdkFocusInitial type="button" (click)="close()">Salir</button>
         <button mat-raised-button color="primary" type="submit">Genera</button>
     </mat-dialog-actions>
 </form>

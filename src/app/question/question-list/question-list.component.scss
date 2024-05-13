@@ -1,4 +1,11 @@
 .filter-form {
-    display:flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+}
+
+.question-list {
+  @media (min-width: 1024px) {
+    width: 80%;
+    margin: 0 auto;
+  }
 }

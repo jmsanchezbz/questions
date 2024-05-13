@@ -10,6 +10,7 @@ import {
   Subject,
   debounceTime,
   distinctUntilChanged,
+  map,
   share,
   startWith,
   switchMap,
@@ -21,6 +22,7 @@ import { StorageService } from "../../services/storage.service";
 import { QuestionItemComponent } from "../question-item/question-item.component";
 import { NgFor, AsyncPipe } from "@angular/common";
 import { QuestionFilterComponent } from "../question-filter/question-filter.component";
+import { TrialQuestion } from "../../model/trial-question";
 
 @Component({
   selector: "app-question-list",
@@ -32,13 +34,14 @@ import { QuestionFilterComponent } from "../question-filter/question-filter.comp
 export class QuestionListComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";
 
-  public questions$: Observable<Array<Question>>;
+  public tQuestions$: Observable<Array<TrialQuestion>>;
   public filter: QuestionFilterChange;
   private filterSubject: Subject<QuestionFilterChange> = new Subject();
   public themes: number[] = Array(30)
     .fill(0)
     .map((_, index) => index + 1);
   public groups: string[] = ["a1", "a2"];
+  public showAnswer: boolean = true;
 
   constructor(
     private questionService: QuestionService,
@@ -50,7 +53,7 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
 
     this.initFilter();
 
-    this.questions$ = this.filterSubject.pipe(
+    this.tQuestions$ = this.filterSubject.pipe(
       tap((filterSubject) => {
         console.log("---QuestionListComponent:ngOnInit()", filterSubject);
       }),
@@ -58,7 +61,13 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
       debounceTime(500),
       distinctUntilChanged(),
       switchMap((filterSubject: QuestionFilterChange) =>
-        this.questionService.findByParams(filterSubject)
+        this.questionService.findByParams(filterSubject).pipe(
+          map((questions: Array<Question>) => {
+            return questions.map((question) => {
+              return TrialQuestion.from(question);
+            });
+          })
+        )
       ),
       share()
     );

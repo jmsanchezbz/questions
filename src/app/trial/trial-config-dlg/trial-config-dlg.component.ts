@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, UpperCasePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
@@ -21,9 +21,12 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { NumberToLetterPipe } from "../../shared/pipes/number-to-letter.pipe";
 import { MatSelectModule } from "@angular/material/select";
+import { TrialService } from "../../services/trial.service";
+import { SharedService } from "../../shared/services/shared.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-  selector: "app-trial-dlg",
+  selector: "app-trial-config-dlg",
   standalone: true,
   imports: [
     CommonModule,
@@ -38,20 +41,25 @@ import { MatSelectModule } from "@angular/material/select";
     MatDialogClose,
     MatIconModule,
     MatSelectModule,
-    NumberToLetterPipe,
+    NumberToLetterPipe
   ],
-  templateUrl: "./trial-dlg.component.html",
-  styleUrl: "./trial-dlg.component.scss",
+  templateUrl: "./trial-config-dlg.component.html",
+  styleUrl: "./trial-config-dlg.component.scss",
 })
-export class TrialDlgComponent implements OnInit {
+export class TrialConfigDlgComponent implements OnInit {
   public trialForm: FormGroup;
   public themes: number[] = Array(30)
     .fill(0)
     .map((_, index) => index + 1);
+  private message: string;
+  private responseOK: boolean;
+  private errorResponse: any;
 
   constructor(
-    public dialogRef: MatDialogRef<TrialDlgComponent>,
-    private fb: FormBuilder
+    public dialogRef: MatDialogRef<TrialConfigDlgComponent>,
+    private fb: FormBuilder,
+    private trialSvc: TrialService,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +94,40 @@ export class TrialDlgComponent implements OnInit {
   }
 
   submit() {
-    console.log("submit", this.trialForm.value);
+    let config = {
+      adm: this.trialForm.value.adm,
+      grp: this.trialForm.value.grp,
+      thm: this.trialForm.value.typ == "g" ? 0 : this.trialForm.value.thm,
+      verified: 0,
+    };
+
+    console.log("TrialDlg-submit", this.trialForm.value, config);
+
+    this.trialSvc.generate(config).subscribe({
+      next: (response) => {
+        this.responseOK = true;
+        if (response) {
+          this.message = "Actualización satisfactoria";
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.message = error.error.msg;
+        this.errorResponse = error.error;
+        this.responseOK = false;
+        throw error;
+      },
+      complete: async () => {
+        console.info("login->complete");
+        await this.sharedService.managementToast(
+          "feedback",
+          this.responseOK,
+          this.errorResponse
+        );
+
+        /*if (this.responseOK) {
+            this.router.navigate([""]);
+          }*/
+      },
+    });
   }
 }

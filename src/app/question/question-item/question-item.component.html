@@ -1,19 +1,21 @@
-<div class="question">
-    <h4><label id="radio-group-label">{{question.number}}.
+<div class="question" [ngClass]="{'question-answered':!trialCompleted && selected}">
+    <h4><label id="radio-group-label">{{myIndex}}.
             <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
-            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()" *ngIf="question.answer" aria-label="Ayuda">help</mat-icon></h4>
-    <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected">
+            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()"
+            *ngIf="trialCompleted && question.answer" aria-label="Ayuda">help</mat-icon></h4>
+    <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
+        (change)="trialCompleted?null:updateTQ()">
         <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
-            A. {{ question.option1 }}<app-check-indicator [option]="1" [answer]="question.answer"
-                [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>A.</strong> {{ question.option1 }}<app-check-indicator *ngIf="trialCompleted" [option]="1"
+                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o2" class="radio-button" [value]="2">
-            B. {{ question.option2 }}<app-check-indicator [option]="2" [answer]="question.answer"
-                [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>B.</strong> {{ question.option2 }}<app-check-indicator *ngIf="trialCompleted" [option]="2"
+                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o3" class="radio-button" [value]="3">
-            C. {{ question.option3 }}<app-check-indicator [option]="3" [answer]="question.answer"
-                [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>C.</strong> {{ question.option3 }}<app-check-indicator *ngIf="trialCompleted" [option]="3"
+                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o4" class="radio-button" [value]="4">
-            D. {{ question.option4 }}<app-check-indicator [option]="4" [answer]="question.answer"
-                [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="trialCompleted" [option]="4"
+                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
     </mat-radio-group>
 </div>

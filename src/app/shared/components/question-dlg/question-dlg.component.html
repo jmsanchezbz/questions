@@ -4,8 +4,9 @@
 <mat-dialog-content>
     <h3>{{question.number}}. {{ question.question }}</h3>
     <div>
-        <label for="answer" class="bold">Respuesta correcta:</label>
-        <p id="answer" style="display:inline">{{ question.answer | numberToLetter }}</p>
+        <label for="answer" class="bold">Respuesta correcta:&nbsp;</label>
+        <p id="answer" style="display:inline">{{ question.answer | numberToLetter }}.
+            {{question['option' + question.answer]}}</p>
     </div>
     <div>
         <label for="explanation" class="bold">Explicación: </label>

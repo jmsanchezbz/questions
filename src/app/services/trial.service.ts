@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { Trial } from "../model/trial";
-import { catchError, Observable } from "rxjs";
+import { catchError, Observable, of } from "rxjs";
 import { QuestionFilterChange } from "../model/question-filter-change";
 import { TrialQuestion } from "../model/trial-question";
 import { SharedService } from "../shared/services/shared.service";
@@ -11,7 +11,7 @@ import { SharedService } from "../shared/services/shared.service";
   providedIn: "root",
 })
 export class TrialService {
-  readonly basePath: string = `${environment.apiUrl}/api/trials`;
+  private readonly basePath: string = `${environment.apiUrl}/api/trials`;
 
   constructor(private http: HttpClient, private sharedService: SharedService) {}
 
@@ -29,7 +29,19 @@ export class TrialService {
       .pipe(catchError(this.sharedService.handleError));
   }
 
-  update(trial: Trial) {
+  close(trial: Trial): Observable<Trial> {
+    console.log(`TrialService.close ${this.basePath}/${trial.id}`);
+
+    if (!trial.is_completed) {
+      trial = Trial.close(trial);
+
+      return this.update(trial);
+    } else {
+      return of(trial);
+    }
+  }
+
+  private update(trial: Trial) {
     console.log(`TrialService.update ${this.basePath}/${trial.id}`);
 
     return this.http.put<Trial>(`${this.basePath}/${trial.id}`, trial);
@@ -37,13 +49,13 @@ export class TrialService {
 
   updateTrialQuestion(tQuestion: TrialQuestion) {
     console.log(
-      `TrialService.updateTQ ${this.basePath}/${tQuestion.trial_id}/questions/${tQuestion.question_id}`
+      `TrialService.updateTQ ${this.basePath}/${tQuestion.trial_id}/questions/${tQuestion.id}`
     );
 
     return this.http
       .put<Trial>(
-        `${this.basePath}/${tQuestion.trial_id}/questions/${tQuestion.question_id}`,
-        tQuestion
+        `${this.basePath}/${tQuestion.trial_id}/questions/${tQuestion.id}`,
+        TrialQuestion.getBasic(tQuestion)
       )
       .pipe(catchError(this.sharedService.handleError));
   }
@@ -52,6 +64,7 @@ export class TrialService {
     console.log(`TrialService.generate ${this.basePath}`);
 
     const config = this.trialConfig(params);
+
     return this.http
       .post<Trial>(`${this.basePath}`, config)
       .pipe(catchError(this.sharedService.handleError));
@@ -62,18 +75,19 @@ export class TrialService {
       adm: params.adm,
       grp: params.grp,
     };
+
     let config;
 
-    if (params.thm) {
+    if (params.thm == 0) {
       config = {
         ...base,
-        typ: "theme",
-        thm: params.thm,
+        typ: "exam",
       };
     } else {
       config = {
         ...base,
-        typ: "exam",
+        typ: "theme",
+        thm: params.thm,
       };
     }
 
