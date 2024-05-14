@@ -1,11 +1,24 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { debounceTime, distinctUntilChanged, Observable, share, startWith, Subject, switchMap, tap } from 'rxjs';
-import { QuestionFilterChange } from '../../model/question-filter-change';
-import { StorageService } from '../../services/storage.service';
-import { MatTableModule } from '@angular/material/table';
-import { QuestionFilterComponent } from '../../question/question-filter/question-filter.component';
-import { StatsTheme } from '../../model/stats-theme';
-import { StatsService } from '../../services/stats.service';
+import { AfterViewInit, Component, OnInit } from "@angular/core";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  share,
+  startWith,
+  Subject,
+  switchMap,
+  tap,
+} from "rxjs";
+import { QuestionFilterChange } from "../../model/question-filter-change";
+import { StorageService } from "../../services/storage.service";
+import { MatTableModule } from "@angular/material/table";
+import { QuestionFilterComponent } from "../../question/question-filter/question-filter.component";
+import { StatsTheme } from "../../model/stats-theme";
+import { StatsService } from "../../services/stats.service";
+import { AsyncPipe } from "@angular/common";
+import { NavigationExtras, Router } from "@angular/router";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 export interface PeriodicElement {
   name: string;
@@ -14,32 +27,22 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
-
 @Component({
-  selector: 'app-themes',
+  selector: "app-themes",
   standalone: true,
   imports: [
     QuestionFilterComponent,
-    MatTableModule
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    AsyncPipe,
   ],
-  templateUrl: './themes.component.html',
-  styleUrl: './themes.component.scss'
+  templateUrl: "./themes.component.html",
+  styleUrl: "./themes.component.scss",
 })
 export class ThemesComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";
-  public readonly TYPE: string = 't';
+  public readonly TYPE: string = "t";
 
   public filter: QuestionFilterChange;
   private filterSubject: Subject<QuestionFilterChange> = new Subject();
@@ -47,25 +50,32 @@ export class ThemesComponent implements OnInit, AfterViewInit {
     .fill(0)
     .map((_, index) => index + 1);
   public groups: string[] = ["a1", "a2"];
-  
+
   public themes$: Observable<Array<StatsTheme>>;
-  
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+
+  displayedColumns: string[] = [
+    "theme",
+    "num_questions",
+    "num_right",
+    "num_wrong",
+    "questions_done",
+    "actions",
+  ];
 
   constructor(
     private statsSvc: StatsService,
-    private storageSvc: StorageService
+    private storageSvc: StorageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    console.log("TrialList ngOnInit:", this.filter);
+    console.log("Themes ngOnInit:", this.filter);
 
     this.initFilter();
 
     this.themes$ = this.filterSubject.pipe(
       tap((filterSubject) => {
-        console.log("---TrialListComponent:ngOnInit()", filterSubject);
+        console.log("---ThemesComponent:ngOnInit()", filterSubject);
       }),
       startWith(this.filterSubject),
       debounceTime(500),
@@ -101,4 +111,19 @@ export class ThemesComponent implements OnInit, AfterViewInit {
     }
   }
 
+  questions(row?: any) {
+    if (row) {
+      const config = {
+        adm: row.administration,
+        grp: row.grup,
+        thm: row.theme,
+      };
+
+      const navigationExtras: NavigationExtras = {
+        queryParams: config,
+      };
+
+      this.router.navigate([`/stats/tQuestions`], navigationExtras);
+    }
+  }
 }

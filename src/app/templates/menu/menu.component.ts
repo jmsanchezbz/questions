@@ -55,9 +55,9 @@ export class MenuComponent {
   }
 
   themes(): void {
-    console.log("Menu themes NOT IMPLEMENTED");
+    console.log("Menu themes");
 
-    this.router.navigateByUrl("/trial/themes");
+    this.router.navigateByUrl("/stats/themes");
   }
 
   trials(): void {

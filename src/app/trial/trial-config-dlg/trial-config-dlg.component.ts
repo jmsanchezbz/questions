@@ -24,6 +24,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { TrialService } from "../../services/trial.service";
 import { SharedService } from "../../shared/services/shared.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-trial-config-dlg",
@@ -41,7 +42,7 @@ import { HttpErrorResponse } from "@angular/common/http";
     MatDialogClose,
     MatIconModule,
     MatSelectModule,
-    NumberToLetterPipe
+    NumberToLetterPipe,
   ],
   templateUrl: "./trial-config-dlg.component.html",
   styleUrl: "./trial-config-dlg.component.scss",
@@ -56,6 +57,7 @@ export class TrialConfigDlgComponent implements OnInit {
   private errorResponse: any;
 
   constructor(
+    private router: Router,
     public dialogRef: MatDialogRef<TrialConfigDlgComponent>,
     private fb: FormBuilder,
     private trialSvc: TrialService,
@@ -100,33 +102,39 @@ export class TrialConfigDlgComponent implements OnInit {
       thm: this.trialForm.value.typ == "g" ? 0 : this.trialForm.value.thm,
       verified: 0,
     };
+    let trialId: number;
 
     console.log("TrialDlg-submit", this.trialForm.value, config);
 
     this.trialSvc.generate(config).subscribe({
       next: (response) => {
         this.responseOK = true;
+        console.log("Trial-config->submit", response);
         if (response) {
           this.message = "Actualización satisfactoria";
+          trialId = response.id;
         }
       },
       error: (error: HttpErrorResponse) => {
         this.message = error.error.msg;
         this.errorResponse = error.error;
         this.responseOK = false;
+        this.sharedService.errorLog(this.errorResponse);
         throw error;
       },
       complete: async () => {
-        console.info("login->complete");
+        console.info("TrialDlg-submit->complete");
+        
         await this.sharedService.managementToast(
           "feedback",
           this.responseOK,
           this.errorResponse
         );
 
-        /*if (this.responseOK) {
-            this.router.navigate([""]);
-          }*/
+        if (this.responseOK) {
+          this.router.navigate([`/trial/${trialId}`]);
+          this.dialogRef.close();
+        }
       },
     });
   }
