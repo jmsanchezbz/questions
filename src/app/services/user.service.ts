@@ -15,6 +15,7 @@ import { UserStoreService } from "./user-store.service";
 import { environment } from "../../environments/environment";
 import { SharedService } from "../shared/services/shared.service";
 import { Profile } from "../model/profile";
+import { User } from "../model/user";
 
 @Injectable({
   providedIn: "root",
@@ -73,16 +74,48 @@ export class UserService {
       });
   }
 
+  me(): Observable<User> {
+    console.log(`UserService-me `);
+
+    return this.http
+      .get<User>(`${environment.apiUrl}/api/users/me`)
+      .pipe(catchError(this.sharedService.handleError));
+  }
+
   register(profile: Profile): Observable<any> {
     console.log(`UserService-register `, profile);
 
+    const dataProfile = {
+      name: profile.name,
+      username: profile.username,
+      password: profile.password,
+      email: profile.email,
+    };
+
     return this.http
-      .post<any>(`${environment.apiUrl}/api/register`, {
-        name: profile.name,
-        username: profile.username,
-        password: profile.password,
-        email: profile.email,
-      })
+      .post<any>(`${environment.apiUrl}/api/register`, dataProfile)
+      .pipe(catchError(this.sharedService.handleError));
+  }
+
+  editProfile(profile: Profile): Observable<any> {
+    console.log(`UserService-edit `, profile);
+    let dataProfile;
+
+    const dataBase = {
+      name: profile.name,
+      username: profile.username,
+      email: profile.email,
+      role: profile.role,
+    };
+
+    if (profile.password.length > 4) {
+      dataProfile = { ...dataBase, password: profile.password };
+    } else {
+      dataProfile = { ...dataBase };
+    }
+    
+    return this.http
+      .put<any>(`${environment.apiUrl}/api/users/${profile.id}`, dataProfile)
       .pipe(catchError(this.sharedService.handleError));
   }
 
@@ -98,6 +131,19 @@ export class UserService {
         tap((response) => {
           console.log("UserService login: ", response, response.access_token);
           this.userStoreService.token = response.access_token;
+
+          const user = {
+            id: 0,
+            name: "",
+            username: response.username,
+            email: "",
+            password: "",
+            role: response.role,
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+
+          this.userStoreService.setUser(user);
         }),
         catchError(this.sharedService.handleError)
       );
@@ -108,6 +154,11 @@ export class UserService {
       this.userStoreService.token != null &&
       this.userStoreService.token != "null"
     );
+  }
+
+  isAdmin(): boolean {
+    const user = this.userStoreService.getUser();
+    return user && user.role && user.role == "admin" ? true : false;
   }
 
   logout(): Observable<any> {

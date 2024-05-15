@@ -10,12 +10,13 @@ import {
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
+  ParamMap,
   Router,
 } from "@angular/router";
-import { of, tap } from "rxjs";
+import { firstValueFrom, of, tap } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
-import { NgIf, NgClass } from "@angular/common";
+import { NgIf, NgClass, UpperCasePipe } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
@@ -23,6 +24,10 @@ import { MatCardModule } from "@angular/material/card";
 import { HttpErrorResponse } from "@angular/common/http";
 import { SharedService } from "../../shared/services/shared.service";
 import { Profile } from "../../model/profile";
+import { User } from "../../model/user";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { canActivateFn } from "../../guards/auth.guard";
 
 @Component({
   selector: "app-register",
@@ -38,13 +43,16 @@ import { Profile } from "../../model/profile";
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
 })
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   formSubmitted = false;
+  userId: number | null = null;
+  private user: User;
   public message: string = "";
-  private userId: number;
   private responseOK: boolean;
   private errorResponse: any;
 
@@ -63,20 +71,74 @@ export class RegisterComponent implements OnInit {
     this.createForm();
   }
 
-  ngOnInit() {
-    this.route.queryParamMap.subscribe((params) => {
-      //this.userId = parseInt(params.get("user"), 10);
-      console.log("888------------>", params, params.get("user"));
+  async ngOnInit() {
+    const paramMap$ = await new Promise<ParamMap>((resolve, reject) => {
+      const subscription = this.route.queryParamMap.subscribe({
+        next: resolve,
+        error: reject,
+        complete: () => subscription.unsubscribe(),
+      });
     });
 
-    this.route.queryParams.subscribe((params) => {
-      //this.userId = parseInt(params.get("user"), 10);
-      console.log("------------>", params);
-    });
+    this.userId = paramMap$.has("user")
+      ? parseInt(paramMap$.get("user"), 10)
+      : null;
+
+    console.log(
+      "Register-onInit",
+      this.userId,
+      this.userService.isAuthenticated()
+    );
+
+    //Check if is a profile
+    if (this.userService.isAuthenticated() && this.userId >= 0) {
+      const passwordControl = this.registerForm.get("password");
+      passwordControl.setValidators([
+        Validators.minLength(4),
+        Validators.maxLength(16),
+      ]);
+      passwordControl.clearValidators();
+      passwordControl.updateValueAndValidity();
+
+      this.userService.me().subscribe({
+        next: (response) => {
+          this.responseOK = true;
+          console.log("Register->userSvc-me>next", response);
+          if (response) {
+            this.message = "Actualización satisfactoria";
+            this.user = response;
+
+            this.registerForm.setValue({
+              id: this.user.id,
+              name: this.user.name,
+              username: this.user.username,
+              email: this.user.email,
+              role: this.user.role,
+              password: "",
+            });
+
+            if ((this.user.role = "admin")) {
+              this.registerForm.get("role").enable();
+            }
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.message = error.error.msg;
+          this.errorResponse = error.error;
+          this.responseOK = false;
+          this.sharedService.errorLog(this.errorResponse);
+          throw error;
+        },
+        complete: async () => {
+          console.info("Register->userSvc-me>complete");
+        },
+      });
+    }
   }
 
   createForm() {
     this.registerForm = this.fb.group({
+      id: new FormControl({ value: 0, disabled: true }, []),
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(4),
@@ -93,10 +155,21 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(4),
         Validators.maxLength(16),
       ]),
+      role: new FormControl(
+        { value: "user", disabled: true },
+        Validators.required
+      ),
     });
   }
 
-  register() {
+  formSubmit() {
+    if (this.userId >= 0) {
+      this.editProfile();
+    } else {
+      this.register();
+    }
+  }
+  private register() {
     this.formSubmitted = true;
 
     if (this.registerForm.valid) {
@@ -147,6 +220,61 @@ export class RegisterComponent implements OnInit {
             if (this.responseOK) {
               this.router.navigate(["user/login"]);
             }
+          },
+        });
+    }
+  }
+
+  private editProfile() {
+    this.formSubmitted = true;
+
+    if (this.registerForm.valid) {
+      const profile = new Profile(
+        this.registerForm.get("id").value,
+        this.registerForm.get("name").value,
+        this.registerForm.get("username").value,
+        this.registerForm.get("email").value,
+        this.registerForm.get("password").value
+      );
+
+      profile.role = this.registerForm.get("role").value;
+
+      const { id, ...reg } = profile;
+
+      this.userService
+        .editProfile(profile)
+        .pipe(
+          tap((response) => {
+            console.log("RegisterComponent-edit", response);
+          }),
+          catchError((error) => {
+            console.error("RegisterComponent-edit", error);
+            this.message = error.error.msg;
+            throw error;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            console.log("RegisterComponent-edit: ", response);
+            this.responseOK = true;
+            if (response) {
+              this.message = response.msg;
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            console.error("RegisterComponent-edit: ", error);
+            this.message = error.error.msg;
+            this.errorResponse = error.error;
+            this.responseOK = false;
+            throw error;
+          },
+          complete: async () => {
+            console.info("RegisterComponent-edit->complete");
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
           },
         });
     }

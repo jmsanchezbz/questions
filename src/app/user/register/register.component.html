@@ -1,7 +1,13 @@
 <div class="container">
     <mat-card class="mat-elevation-z4">
-        <h1>Registro</h1>
-        <form [formGroup]="registerForm" (ngSubmit)="register()" class="my-form">
+        <h1>{{this.userId==0?'Perfil':'Registro'}}</h1>
+        <form [formGroup]="registerForm" (ngSubmit)="formSubmit()" class="my-form">
+            <section *ngIf="this.userId>=0">
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>id</mat-label>
+                    <input matInput type="text" formControlName="id" />
+                </mat-form-field>
+            </section>
             <section>
                 <mat-form-field appearance="fill" class="full-width">
                     <mat-label>Nombre</mat-label>
@@ -15,7 +21,7 @@
             <section>
                 <mat-form-field appearance="fill" class="full-width">
                     <mat-label>Usuario</mat-label>
-                    <input matInput type="text" formControlName="username" placeholder="Usuario" />
+                    <input matInput type="text" formControlName="username" placeholder="Usuario" autocomplete="off" />
                     <mat-error *ngIf="registerForm.get('username')?.dirty || formSubmitted">
                         <span *ngIf="registerForm.get('username')?.hasError('required')">Usuario es
                             obligatorio</span>
@@ -29,14 +35,15 @@
                     <mat-error *ngIf="registerForm.get('email')?.dirty || formSubmitted">
                         <span *ngIf="registerForm.get('email')?.hasError('required')">Correo electrónico es
                             obligatorio</span>
-                        <span *ngIf="registerForm.get('email')?.hasError('email')">Correo electrónico debe ser válido</span>
+                        <span *ngIf="registerForm.get('email')?.hasError('email')">Correo electrónico debe ser
+                            válido</span>
                     </mat-error>
                 </mat-form-field>
             </section>
             <section>
                 <mat-form-field appearence="fill" class="full-width">
                     <mat-label>Contraseña</mat-label>
-                    <input matInput type="password" formControlName="password" required />
+                    <input matInput type="password" formControlName="password" required autocomplete="off" />
                     <mat-error *ngIf="registerForm.get('password')?.dirty || formSubmitted">
                         <span *ngIf="registerForm.get('password')?.hasError('required')">La contraseña es
                             obligatoria</span>
@@ -48,8 +55,19 @@
                 </mat-form-field>
             </section>
             <section>
-                <button mat-raised-button color="primary" type="submit"
+                <mat-form-field>
+                    <mat-label>Rol</mat-label>
+                    <mat-select id="cbxRole" name="cbxRole" formControlName="role">
+                        <mat-option value="user">User</mat-option>
+                        <mat-option value="admin">Admin</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </section>
+            <section>
+                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId==null"
                     [disabled]="!registerForm.valid">Registra</button>
+                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId>=0"
+                    [disabled]="!registerForm.valid">Guarda</button>
             </section>
         </form>
     </mat-card>
