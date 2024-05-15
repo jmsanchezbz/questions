@@ -27,7 +27,6 @@ import { Profile } from "../../model/profile";
 import { User } from "../../model/user";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
-import { canActivateFn } from "../../guards/auth.guard";
 
 @Component({
   selector: "app-register",
@@ -85,7 +84,7 @@ export class RegisterComponent implements OnInit {
       : null;
 
     console.log(
-      "Register-onInit",
+      "Register-onInit userId+isAuthenticated",
       this.userId,
       this.userService.isAuthenticated()
     );
@@ -138,7 +137,7 @@ export class RegisterComponent implements OnInit {
 
   createForm() {
     this.registerForm = this.fb.group({
-      id: new FormControl({ value: 0, disabled: true }, []),
+      id: new FormControl({ value: null, disabled: true }, []),
       name: new FormControl(null, [
         Validators.required,
         Validators.minLength(4),
@@ -163,6 +162,8 @@ export class RegisterComponent implements OnInit {
   }
 
   formSubmit() {
+    console.log("formSubmit", this.userId);
+
     if (this.userId >= 0) {
       this.editProfile();
     } else {
@@ -240,7 +241,10 @@ export class RegisterComponent implements OnInit {
       profile.role = this.registerForm.get("role").value;
 
       const { id, ...reg } = profile;
-
+      console.log(
+        "edit---------------------------------------------------------------------------------------->",
+        profile
+      );
       this.userService
         .editProfile(profile)
         .pipe(
@@ -261,12 +265,16 @@ export class RegisterComponent implements OnInit {
               this.message = response.msg;
             }
           },
-          error: (error: HttpErrorResponse) => {
+          error: async (error: HttpErrorResponse) => {
             console.error("RegisterComponent-edit: ", error);
-            this.message = error.error.msg;
+            this.message = error.message;
             this.errorResponse = error.error;
             this.responseOK = false;
-            throw error;
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
           },
           complete: async () => {
             console.info("RegisterComponent-edit->complete");

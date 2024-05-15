@@ -16,6 +16,7 @@ import { environment } from "../../environments/environment";
 import { SharedService } from "../shared/services/shared.service";
 import { Profile } from "../model/profile";
 import { User } from "../model/user";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: "root",
@@ -26,7 +27,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private userStoreService: UserStoreService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private route: Router
   ) {}
 
   private checkTokenValidity(): Observable<boolean> {
@@ -63,6 +65,7 @@ export class UserService {
           console.log("UserService-startTokenValidation: ", response);
           if (!response) {
             this.userStoreService.reset();
+            this.route.navigate(["/"]);
           }
         },
         error: (error) => {
@@ -108,12 +111,12 @@ export class UserService {
       role: profile.role,
     };
 
-    if (profile.password.length > 4) {
+    if (profile.password.length > 3) {
       dataProfile = { ...dataBase, password: profile.password };
     } else {
       dataProfile = { ...dataBase };
     }
-    
+
     return this.http
       .put<any>(`${environment.apiUrl}/api/users/${profile.id}`, dataProfile)
       .pipe(catchError(this.sharedService.handleError));

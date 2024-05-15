@@ -88,12 +88,16 @@ export class LoginComponent {
               this.message = response.msg;
             }
           },
-          error: (error: HttpErrorResponse) => {
+          error: async (error: HttpErrorResponse) => {
             console.error("Login error: ", error);
-            this.message = error.error.msg;
-            this.errorResponse = error.error;
+            this.message = error.message;
+            this.errorResponse = error;
             this.responseOK = false;
-            throw error;
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
           },
           complete: async () => {
             console.info("login->complete");

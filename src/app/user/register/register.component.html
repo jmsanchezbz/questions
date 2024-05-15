@@ -2,7 +2,7 @@
     <mat-card class="mat-elevation-z4">
         <h1>{{this.userId==0?'Perfil':'Registro'}}</h1>
         <form [formGroup]="registerForm" (ngSubmit)="formSubmit()" class="my-form">
-            <section *ngIf="this.userId>=0">
+            <section *ngIf="this.userId!=null">
                 <mat-form-field appearance="fill" class="full-width">
                     <mat-label>id</mat-label>
                     <input matInput type="text" formControlName="id" />
@@ -66,7 +66,7 @@
             <section>
                 <button mat-raised-button color="primary" type="submit" *ngIf="this.userId==null"
                     [disabled]="!registerForm.valid">Registra</button>
-                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId>=0"
+                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId!=null"
                     [disabled]="!registerForm.valid">Guarda</button>
             </section>
         </form>
