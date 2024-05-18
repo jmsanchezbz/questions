@@ -16,6 +16,10 @@ export class Trial {
     public trial_questions: TrialQuestion[]
   ) {}
 
+  static sortByUpdatedAtDesc(trials: Trial[]): Trial[] {
+    return trials.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+  }
+
   static close(trial: Trial) {
     if (!trial.is_completed) {
       trial.num_mistakes = Trial.countMistakes(trial);

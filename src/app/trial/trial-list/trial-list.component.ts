@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { QuestionFilterComponent } from "../../question/question-filter/question-filter.component";
 import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
@@ -10,13 +10,20 @@ import {
   share,
   startWith,
   Subject,
+  Subscription,
   switchMap,
   tap,
 } from "rxjs";
 import { TrialService } from "../../services/trial.service";
-import { MatTableModule } from "@angular/material/table";
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { Trial } from "../../model/trial";
-import { AsyncPipe, DatePipe, NgClass, NgIf, UpperCasePipe } from "@angular/common";
+import {
+  AsyncPipe,
+  DatePipe,
+  NgClass,
+  NgIf,
+  UpperCasePipe,
+} from "@angular/common";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TrialDoneIndicatorComponent } from "../trial-done-indicator/trial-done-indicator.component";
 import { MatIconModule } from "@angular/material/icon";
@@ -24,7 +31,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { TrialConfigDlgComponent } from "../trial-config-dlg/trial-config-dlg.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
-import { SharedService } from '../../shared/services/shared.service';
+import { SharedService } from "../../shared/services/shared.service";
+import { MatSort, MatSortModule, Sort } from "@angular/material/sort";
+import { LiveAnnouncer } from "@angular/cdk/a11y";
 
 @Component({
   selector: "app-trial-list",
@@ -39,7 +48,8 @@ import { SharedService } from '../../shared/services/shared.service';
     DatePipe,
     NgClass,
     NgIf,
-    UpperCasePipe
+    MatSortModule,
+    UpperCasePipe,
   ],
   templateUrl: "./trial-list.component.html",
   styleUrl: "./trial-list.component.scss",
@@ -54,7 +64,8 @@ export class TrialListComponent implements OnInit, AfterViewInit {
     .fill(0)
     .map((_, index) => index + 1);
   public groups: string[] = ["a1", "a2"];
-
+  public dataSource;
+  private trialsSubscription: Subscription | null = null;
   public trials$: Observable<Array<Trial>>;
 
   selection = new SelectionModel<Trial>(false, []);
@@ -73,7 +84,8 @@ export class TrialListComponent implements OnInit, AfterViewInit {
     private storageSvc: StorageService,
     public dialog: MatDialog,
     private router: Router,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private _liveAnnouncer: LiveAnnouncer
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +93,8 @@ export class TrialListComponent implements OnInit, AfterViewInit {
 
     this.initFilter();
 
-    this.trials$ = this.filterSubject.pipe(
+    this.trials$
+    this.trialsSubscription = this.filterSubject.pipe(
       tap((filterSubject) => {
         console.log("---TrialListComponent:ngOnInit()", filterSubject);
       }),
@@ -92,11 +105,16 @@ export class TrialListComponent implements OnInit, AfterViewInit {
         this.trialSvc.findAll()
       ),
       share()
-    );
+    ).subscribe(trials =>{
+      this.dataSource = new MatTableDataSource(Trial.sortByUpdatedAtDesc(trials));
+    });
   }
+
+  @ViewChild(MatSort) sort: MatSort;
 
   ngAfterViewInit() {
     this.filterSubject.next(this.filter);
+    this.dataSource.sort = this.sort;
   }
 
   onFilterChanged(changes: QuestionFilterChange) {
@@ -134,10 +152,22 @@ export class TrialListComponent implements OnInit, AfterViewInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(TrialConfigDlgComponent, { minWidth: 300 });
+    const dialogRef = this.dialog.open(TrialConfigDlgComponent, {
+      minWidth: 300,
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`QuestionItem-openDialog: ${result}`);
     });
+  }
+
+  announceSortChange(sortState: Sort) {
+    console.log(`Sorted ${sortState.direction}ending`);
+
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce("Sorting cleared");
+    }
   }
 }
