@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { Question } from "../../model/question";
 import { NgClass, NgIf } from "@angular/common";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { MatRadioModule } from "@angular/material/radio";
 import { FormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
@@ -16,6 +16,8 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { CheckIndicatorComponent } from "../../shared/components/check-indicator/check-indicator.component";
 import { QuestionDlgComponent } from "../../shared/components/question-dlg/question-dlg.component";
 import { TrialQuestion } from "../../model/trial-question";
+import { UserService } from "../../services/user.service";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-question-item",
@@ -30,6 +32,7 @@ import { TrialQuestion } from "../../model/trial-question";
     MatIconModule,
     CheckIndicatorComponent,
     NgClass,
+    MatButtonModule,
   ],
 })
 export class QuestionItemComponent implements OnInit {
@@ -45,7 +48,11 @@ export class QuestionItemComponent implements OnInit {
   public showAnswer: boolean = false;
   selected: number = null;
 
-  constructor(public dialog: MatDialog) {
+  constructor(
+    public dialog: MatDialog,
+    private userSvc: UserService,
+    private router: Router
+  ) {
     this.answerSelected = new EventEmitter<TrialQuestion>();
   }
 
@@ -82,5 +89,19 @@ export class QuestionItemComponent implements OnInit {
 
       this.answerSelected.emit(this.tQuestion);
     }
+  }
+
+  isAdmin(): boolean {
+    return this.userSvc.isAdmin();
+  }
+
+  isAuthenticated(): boolean {
+    return this.userSvc.isAuthenticated();
+  }
+
+  edit() {
+    console.log(`Edit: /question/${this.question.id}`);
+    
+    this.router.navigate([`/question/${this.question.id}`]);
   }
 }

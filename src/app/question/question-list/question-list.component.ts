@@ -23,6 +23,7 @@ import { QuestionItemComponent } from "../question-item/question-item.component"
 import { NgFor, AsyncPipe } from "@angular/common";
 import { QuestionFilterComponent } from "../question-filter/question-filter.component";
 import { TrialQuestion } from "../../model/trial-question";
+import { UserStoreService } from '../../services/user-store.service';
 
 @Component({
   selector: "app-question-list",
@@ -45,11 +46,12 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private questionService: QuestionService,
-    private storageSvc: StorageService
+    private storageSvc: StorageService,
+    private userStoreSvc: UserStoreService
   ) {}
 
   ngOnInit() {
-    console.log("QuestionList ngOnInit:", this.filter);
+    console.log("QuestionList ngOnInit:", this.filter,this.userStoreSvc.getUser(),this.userStoreSvc.token);
 
     this.initFilter();
 

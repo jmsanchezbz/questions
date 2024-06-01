@@ -28,7 +28,7 @@ export class UserService {
     private http: HttpClient,
     private userStoreService: UserStoreService,
     private sharedService: SharedService,
-    private route: Router
+    private route: Router,
   ) {}
 
   private checkTokenValidity(): Observable<boolean> {
@@ -147,6 +147,7 @@ export class UserService {
           };
 
           this.userStoreService.setUser(user);
+          console.log("UserService login - store: ", this.userStoreService.getUser());
         }),
         catchError(this.sharedService.handleError)
       );

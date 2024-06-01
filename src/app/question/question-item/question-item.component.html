@@ -18,4 +18,8 @@
             <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="trialCompleted" [option]="4"
                 [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
     </mat-radio-group>
+    <section class="actions" *ngIf="isAuthenticated() && (!question.verified || isAdmin())">
+        <button mat-raised-button color="primary" type="button"
+            (click)="edit()">Edita</button>
+    </section>
 </div>
