@@ -8,7 +8,6 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
 import { QuestionService } from '../services/question.service';
 import { QuestionFilterComponent } from './question-filter/question-filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { QuestionEditComponent } from './question-edit/question-edit.component';
 
 @NgModule({
     imports: [
@@ -19,8 +18,7 @@ import { QuestionEditComponent } from './question-edit/question-edit.component';
         QuestionItemComponent,
         QuestionListComponent,
         QuestionDetailComponent,
-        QuestionFilterComponent,
-        QuestionEditComponent
+        QuestionFilterComponent
     ],
     providers: [
         QuestionService,
