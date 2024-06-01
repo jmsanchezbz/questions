@@ -16,7 +16,7 @@ import { environment } from "../../environments/environment";
 import { SharedService } from "../shared/services/shared.service";
 import { Profile } from "../model/profile";
 import { User } from "../model/user";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
@@ -28,7 +28,7 @@ export class UserService {
     private http: HttpClient,
     private userStoreService: UserStoreService,
     private sharedService: SharedService,
-    private route: Router,
+    private route: Router
   ) {}
 
   private checkTokenValidity(): Observable<boolean> {
@@ -46,6 +46,22 @@ export class UserService {
         return of(false);
       })
     );
+  }
+
+  public findById(userId: number): Observable<User> {
+    console.log(`UserService-findById `);
+
+    return this.http
+      .get<User>(`${environment.apiUrl}/api/users/${userId}`)
+      .pipe(catchError(this.sharedService.handleError));
+  }
+
+  public findAll(): Observable<User[]> {
+    console.log(`UserService-findAll `);
+
+    return this.http
+      .get<User[]>(`${environment.apiUrl}/api/users`)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   public startTokenValidation(): void {
@@ -147,7 +163,10 @@ export class UserService {
           };
 
           this.userStoreService.setUser(user);
-          console.log("UserService login - store: ", this.userStoreService.getUser());
+          console.log(
+            "UserService login - store: ",
+            this.userStoreService.getUser()
+          );
         }),
         catchError(this.sharedService.handleError)
       );

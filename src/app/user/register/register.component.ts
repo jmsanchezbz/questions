@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +16,7 @@ import {
 import { firstValueFrom, of, tap } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
-import { NgIf, NgClass, UpperCasePipe } from "@angular/common";
+import { NgIf, NgClass, UpperCasePipe, NgFor } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
@@ -37,6 +37,7 @@ import { MatSelectModule } from "@angular/material/select";
     FormsModule,
     ReactiveFormsModule,
     NgIf,
+    NgFor,
     NgClass,
     MatFormFieldModule,
     MatInputModule,
@@ -51,16 +52,20 @@ export class RegisterComponent implements OnInit {
   formSubmitted = false;
   userId: number | null = null;
   private user: User;
+  public isAdmin = false;
+  public selUser: number = 0;
+  public users: User[];
   public message: string = "";
   private responseOK: boolean;
   private errorResponse: any;
 
   constructor(
-    private userService: UserService,
+    private userSvc: UserService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private cdr: ChangeDetectorRef
   ) {
     console.log(
       "RegisterComponent",
@@ -79,6 +84,10 @@ export class RegisterComponent implements OnInit {
       });
     });
 
+    this.isAdmin = this.userSvc.isAdmin();
+
+    this.fetchUsers();
+
     this.userId = paramMap$.has("user")
       ? parseInt(paramMap$.get("user"), 10)
       : null;
@@ -86,11 +95,11 @@ export class RegisterComponent implements OnInit {
     console.log(
       "Register-onInit userId+isAuthenticated",
       this.userId,
-      this.userService.isAuthenticated()
+      this.userSvc.isAuthenticated()
     );
 
     //Check if is a profile
-    if (this.userService.isAuthenticated() && this.userId >= 0) {
+    if (this.userSvc.isAuthenticated() && this.userId >= 0) {
       const passwordControl = this.registerForm.get("password");
       passwordControl.setValidators([
         Validators.minLength(4),
@@ -99,43 +108,110 @@ export class RegisterComponent implements OnInit {
       passwordControl.clearValidators();
       passwordControl.updateValueAndValidity();
 
-      this.userService.me().subscribe({
-        next: (response) => {
-          this.responseOK = true;
-          console.log("Register->userSvc-me>next", response);
-          if (response) {
-            this.message = "Actualización satisfactoria";
-            this.user = response;
-
-            this.registerForm.setValue({
-              id: this.user.id,
-              name: this.user.name,
-              username: this.user.username,
-              email: this.user.email,
-              role: this.user.role,
-              password: "",
-            });
-
-            if ((this.user.role = "admin")) {
-              this.registerForm.get("role").enable();
-            }
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          this.message = error.error.msg;
-          this.errorResponse = error.error;
-          this.responseOK = false;
-          this.sharedService.errorLog(this.errorResponse);
-          throw error;
-        },
-        complete: async () => {
-          console.info("Register->userSvc-me>complete");
-        },
-      });
+      this.fetchMe();
     }
   }
 
-  createForm() {
+  private fetchMe() {
+    this.userSvc.me().subscribe({
+      next: (response) => {
+        this.responseOK = true;
+        console.log("Register->userSvc-me>next", response);
+        if (response) {
+          this.message = "Actualización satisfactoria";
+          this.user = response;
+          this.selUser = this.user.id;
+
+          this.initFormValues(this.user);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.message = error.error.msg;
+        this.errorResponse = error.error;
+        this.responseOK = false;
+        this.sharedService.errorLog(this.errorResponse);
+        throw error;
+      },
+      complete: async () => {
+        console.info("Register->userSvc-me>complete");
+      },
+    });
+  }
+
+  private fetchUserId(userId: number) {
+    this.userSvc.findById(userId).subscribe({
+      next: (response) => {
+        this.responseOK = true;
+        console.log("Register->userSvc-findById>next", response);
+
+        if (response) {
+          this.message = "User.FindById";
+          this.user = response;
+          this.selUser = this.user.id;
+
+          this.initFormValues(this.user);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.message = error.error.msg;
+        this.errorResponse = error.error;
+        this.responseOK = false;
+        this.sharedService.errorLog(this.errorResponse);
+        throw error;
+      },
+      complete: async () => {
+        console.info("Register->userSvc-findById>complete");
+      },
+    });
+  }
+
+  private initFormValues(user: User) {
+    this.registerForm.setValue({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      password: "",
+    });
+
+
+    if (this.isAdmin) {
+      this.registerForm.get("role").enable();
+    }
+  }
+
+  private fetchUsers() {
+    console.log("Register-loadUsers");
+
+    if (!this.isAdmin) {
+      this.users = [this.user];
+      return;
+    }
+
+    this.userSvc.findAll().subscribe({
+      next: (response) => {
+        this.responseOK = true;
+        console.log("Register->loadUsers>next", response);
+        if (response) {
+          this.message = "User.findAll";
+          this.users = response;
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.message = error.error.msg;
+        this.errorResponse = error.error;
+        this.responseOK = false;
+        this.sharedService.errorLog(this.errorResponse);
+        throw error;
+      },
+      complete: async () => {
+        console.info("Register->loadUsers>complete");
+      },
+    });
+  }
+
+  private createForm() {
     this.registerForm = this.fb.group({
       id: new FormControl({ value: null, disabled: true }, []),
       name: new FormControl(null, [
@@ -183,7 +259,7 @@ export class RegisterComponent implements OnInit {
       );
       const { id, ...reg } = profile;
 
-      this.userService
+      this.userSvc
         .register(profile)
         .pipe(
           tap((response) => {
@@ -241,11 +317,7 @@ export class RegisterComponent implements OnInit {
       profile.role = this.registerForm.get("role").value;
 
       const { id, ...reg } = profile;
-      console.log(
-        "edit---------------------------------------------------------------------------------------->",
-        profile
-      );
-      this.userService
+      this.userSvc
         .editProfile(profile)
         .pipe(
           tap((response) => {
@@ -286,5 +358,15 @@ export class RegisterComponent implements OnInit {
           },
         });
     }
+  }
+
+  changeUser(selUserId: number) {
+    console.log("SelUserId: " + selUserId);
+
+    this.fetchUserId(selUserId);
+  }
+
+  goHome() {
+    this.router.navigate([""]);
   }
 }
