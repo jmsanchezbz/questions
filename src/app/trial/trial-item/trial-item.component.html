@@ -1,6 +1,6 @@
 <div>
     <div class="container">
-        <h1>{{name}} {{trial.theme?trial.theme:''}}</h1>
+        <h1>{{name}} {{trial.theme?trial.theme:''}} <mat-icon class="deafult-color" *ngIf="trial.is_completed">done_outline</mat-icon></h1>
     </div>
 
     <div class="filter-form">
@@ -37,3 +37,6 @@
         </div>
     </div>
 </div>
+<button class="br-fixed my-btn" mat-icon-button aria-label="Flecha hacia arriba" (click)="scrollToTop()">
+    <mat-icon>arrow_upward</mat-icon>
+</button>

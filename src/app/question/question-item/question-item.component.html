@@ -3,8 +3,9 @@
             <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
             {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()"
             *ngIf="trialCompleted && question.answer" aria-label="Ayuda">help</mat-icon></h4>
+
     <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
-        (change)="trialCompleted?null:updateTQ()">
+        (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
         <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
             <strong>A.</strong> {{ question.option1 }}<app-check-indicator *ngIf="trialCompleted" [option]="1"
                 [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
@@ -18,8 +19,8 @@
             <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="trialCompleted" [option]="4"
                 [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
     </mat-radio-group>
-    <section class="actions" *ngIf="isAuthenticated() && (!question.verified || isAdmin())">
-        <button mat-raised-button color="primary" type="button"
-            (click)="edit()">Edita</button>
+    
+    <section class="actions" *ngIf="index == -1 && isAuthenticated() && (!question.verified || isAdmin())">
+        <button mat-raised-button color="primary" type="button" (click)="edit()">Edita</button>
     </section>
 </div>

@@ -1,4 +1,4 @@
-<div>
+<div class="main">
     <div class="container">
         <h1>Questions</h1>
     </div>
@@ -11,7 +11,10 @@
     <!-- question list -->
     <div class="question-list">
         <div *ngFor="let tQuestion of tQuestions$ | async; index as id">
-            <app-question-item [index]="-1" [tQuestion]="tQuestion" [trialCompleted]="true"></app-question-item>
+            <app-question-item [index]="-1" [tQuestion]="tQuestion"></app-question-item>
         </div>
     </div>
+    <button class="br-fixed my-btn" mat-icon-button aria-label="Flecha hacia arriba" (click)="scrollToTop()">
+        <mat-icon>arrow_upward</mat-icon>
+    </button>
 </div>

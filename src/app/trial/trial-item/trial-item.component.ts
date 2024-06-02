@@ -13,6 +13,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { TrialStatsDlgComponent } from "../trial-stats-dlg/trial-stats-dlg.component";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: "app-trial-item",
@@ -27,6 +28,7 @@ import { TrialStatsDlgComponent } from "../trial-stats-dlg/trial-stats-dlg.compo
     AsyncPipe,
     NgIf,
     NgFor,
+    MatIconModule
   ],
   templateUrl: "./trial-item.component.html",
   styleUrl: "./trial-item.component.scss",
@@ -117,5 +119,10 @@ export class TrialItemComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`TrialItem-openDialog: ${result}`);
     });
+  }
+
+  scrollToTop() {
+    const topElement = document.querySelector('#top');
+    topElement.scrollIntoView({ behavior: "smooth" });
   }
 }

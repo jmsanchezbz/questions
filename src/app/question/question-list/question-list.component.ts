@@ -23,14 +23,23 @@ import { QuestionItemComponent } from "../question-item/question-item.component"
 import { NgFor, AsyncPipe } from "@angular/common";
 import { QuestionFilterComponent } from "../question-filter/question-filter.component";
 import { TrialQuestion } from "../../model/trial-question";
-import { UserStoreService } from '../../services/user-store.service';
+import { UserStoreService } from "../../services/user-store.service";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: "app-question-list",
   templateUrl: "./question-list.component.html",
   styleUrl: "./question-list.component.scss",
   standalone: true,
-  imports: [QuestionFilterComponent, NgFor, QuestionItemComponent, AsyncPipe],
+  imports: [
+    QuestionFilterComponent,
+    NgFor,
+    QuestionItemComponent,
+    AsyncPipe,
+    MatIconModule,
+    MatButtonModule,
+  ],
 })
 export class QuestionListComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";
@@ -51,7 +60,12 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    console.log("QuestionList ngOnInit:", this.filter,this.userStoreSvc.getUser(),this.userStoreSvc.token);
+    console.log(
+      "QuestionList ngOnInit:",
+      this.filter,
+      this.userStoreSvc.getUser(),
+      this.userStoreSvc.token
+    );
 
     this.initFilter();
 
@@ -97,5 +111,10 @@ export class QuestionListComponent implements OnInit, AfterViewInit {
   onFilterChanged(changes: QuestionFilterChange) {
     this.storageSvc.store(this.FILTER_CHANGE, changes);
     this.filterSubject.next(changes);
+  }
+
+  scrollToTop() {
+    const topElement = document.querySelector('#top');
+    topElement.scrollIntoView({ behavior: "smooth" });
   }
 }
