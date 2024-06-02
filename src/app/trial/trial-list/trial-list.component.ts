@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { QuestionFilterComponent } from "../../question/question-filter/question-filter.component";
 import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
@@ -34,6 +40,7 @@ import { Router } from "@angular/router";
 import { SharedService } from "../../shared/services/shared.service";
 import { MatSort, MatSortModule, Sort } from "@angular/material/sort";
 import { LiveAnnouncer } from "@angular/cdk/a11y";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: "app-trial-list",
@@ -50,11 +57,14 @@ import { LiveAnnouncer } from "@angular/cdk/a11y";
     NgIf,
     MatSortModule,
     UpperCasePipe,
+    MatTooltipModule,
   ],
   templateUrl: "./trial-list.component.html",
   styleUrl: "./trial-list.component.scss",
 })
-export class TrialListComponent implements OnInit, AfterViewInit {
+export class TrialListComponent
+  implements OnInit, AfterViewInit, AfterContentInit
+{
   readonly FILTER_CHANGE: string = "filter-change";
   public readonly TYPE: string = "t";
 
@@ -79,6 +89,8 @@ export class TrialListComponent implements OnInit, AfterViewInit {
     "actions",
   ];
 
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(
     private trialSvc: TrialService,
     private storageSvc: StorageService,
@@ -93,28 +105,36 @@ export class TrialListComponent implements OnInit, AfterViewInit {
 
     this.initFilter();
 
-    this.trials$
-    this.trialsSubscription = this.filterSubject.pipe(
-      tap((filterSubject) => {
-        console.log("---TrialListComponent:ngOnInit()", filterSubject);
-      }),
-      startWith(this.filterSubject),
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap((filterSubject: QuestionFilterChange) =>
-        this.trialSvc.findAll()
-      ),
-      share()
-    ).subscribe(trials =>{
-      this.dataSource = new MatTableDataSource(Trial.sortByUpdatedAtDesc(trials));
-    });
+    this.trials$;
+    this.trialsSubscription = this.filterSubject
+      .pipe(
+        tap((filterSubject) => {
+          console.log("---TrialListComponent:ngOnInit()", filterSubject);
+        }),
+        startWith(this.filterSubject),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((filterSubject: QuestionFilterChange) =>
+          this.trialSvc.findAll()
+        ),
+        share()
+      )
+      .subscribe((trials) => {
+        this.dataSource = new MatTableDataSource(
+          Trial.sortByUpdatedAtDesc(trials)
+        );
+      });
   }
 
-  @ViewChild(MatSort) sort: MatSort;
+  ngAfterViewInit() {}
 
-  ngAfterViewInit() {
+  ngAfterContentInit(): void {
     this.filterSubject.next(this.filter);
-    this.dataSource.sort = this.sort;
+    if (this.dataSource) {
+      this.dataSource.sort = this.sort;
+    } else {
+      console.log("TrialListComponent dataSource is undefined");
+    }
   }
 
   onFilterChanged(changes: QuestionFilterChange) {
