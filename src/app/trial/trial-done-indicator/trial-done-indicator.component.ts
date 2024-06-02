@@ -10,16 +10,34 @@ import { MatIconModule } from "@angular/material/icon";
   styleUrl: "./trial-done-indicator.component.scss",
 })
 export class TrialDoneIndicatorComponent implements OnInit {
-  @Input() numQuestions: number = 0;
+  @Input() numQuestions: number = 1;
   @Input() numMistakes: number;
+  /*
+   * format: field
+   * -2 - complete parenthesis ((percentage right) + shield)
+   * -1 - complete (percentage right + shield)
+   *  0 - basic (only shield)
+   *  1 - complete (percentage wrong + shield)
+   *  2 - complete parenthesis ((percentage wrong) + shield)
+   */
+  @Input() format: string = "0";
 
-  public perErrors: number | null = null;
+  public perRight: number | null = null;
+  public perWrong: number | null = null;
 
   constructor() {}
 
-  ngOnInit(){
+  ngOnInit() {
     let mistakes: number;
 
-    this.perErrors = (this.numMistakes * 100) / this.numQuestions;
+    this.perWrong = parseFloat(
+      ((this.numMistakes * 100) / this.numQuestions).toFixed(2)
+    );
+
+    this.perRight = parseFloat((100 - this.perWrong).toFixed(2));
+  }
+
+  show(): boolean {
+    return this.numMistakes !== 0 || this.numQuestions == this.numMistakes;
   }
 }
