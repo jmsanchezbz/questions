@@ -22,7 +22,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   providedIn: "root",
 })
 export class UserService {
-  private readonly tokenCheckInterval = 60000;
+  private readonly tokenCheckInterval = 5 * 60000; //5 min
 
   constructor(
     private http: HttpClient,
