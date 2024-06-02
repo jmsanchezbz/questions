@@ -1,0 +1,35 @@
+.my-table {
+  width: 100%;
+
+  .responsive-display {
+    display: none;
+  }
+
+  .responsive-mobile {
+    display: table-cell;
+  }
+
+  @media (min-width: 1024px) {
+    min-width: 720px;
+
+    .responsive-display {
+      display: table-cell;
+    }
+
+    .responsive-mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    min-width: 1000px;
+  }
+}
+
+.green {
+    color:lightseagreen;
+}
+
+.red {
+    color: lightcoral;
+}

@@ -14,6 +14,12 @@ body {
   font-family: "Fira Sans Extra Condensed", Roboto, "Helvetica Neue", sans-serif;
 }
 
+footer {
+  display: flex; /* Make footer a flex container */
+  justify-content: center; /* Center elements horizontally */
+  align-items: center; /* Optionally, center vertically */
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -22,10 +28,25 @@ body {
   //padding: 20px;
 }
 
-/* Colors */
+.text-right {
+  text-align: right;
+}
 
+.shield {
+  text-align: right !important;
+  
+  @media (min-width: 1024px){
+    margin-right: 2rem;
+  }
+}
+
+.tooltip {
+  white-space: pre-line;
+}
+
+/* Colors */
 .green {
-  color: #03DAC6 !important;
+  color: lightseagreen !important;
 }
 
 .red {
@@ -38,4 +59,8 @@ body {
 
 .white {
   color: white !important;
+}
+
+.default-color {
+  color: rgb(63, 81, 181);
 }

@@ -13,12 +13,14 @@ import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
 import { MatTableModule } from "@angular/material/table";
 import { QuestionFilterComponent } from "../../question/question-filter/question-filter.component";
+import { TrialDoneIndicatorComponent } from '../../trial/trial-done-indicator/trial-done-indicator.component';
 import { StatsTheme } from "../../model/stats-theme";
 import { StatsService } from "../../services/stats.service";
 import { AsyncPipe } from "@angular/common";
 import { NavigationExtras, Router } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface PeriodicElement {
   name: string;
@@ -32,10 +34,12 @@ export interface PeriodicElement {
   standalone: true,
   imports: [
     QuestionFilterComponent,
+    TrialDoneIndicatorComponent,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
     AsyncPipe,
+    MatTooltipModule
   ],
   templateUrl: "./themes.component.html",
   styleUrl: "./themes.component.scss",
@@ -58,6 +62,7 @@ export class ThemesComponent implements OnInit, AfterViewInit {
     "num_questions",
     "num_right",
     "num_wrong",
+    "right_wrong",
     "questions_done",
     "actions",
   ];
