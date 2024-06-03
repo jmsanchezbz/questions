@@ -32,20 +32,28 @@ export class UserService {
   ) {}
 
   private checkTokenValidity(): Observable<boolean> {
-    return this.http.get<any>(`${environment.apiUrl}/api/authenticated`).pipe(
-      tap((response) => {
-        console.log("UserService-CheckTokenValidity Authorized login attempt");
-        if (response.authenticated == true) {
-          return of(true);
-        } else {
+    if (this.userStoreService.token) {
+      return this.http.get<any>(`${environment.apiUrl}/api/authenticated`).pipe(
+        tap((response) => {
+          console.log(
+            "UserService-CheckTokenValidity Authorized login attempt"
+          );
+          
+          if (response.authenticated == true) {
+            return of(true);
+          } else {
+            this.userStoreService.reset();
+            return of(false);
+          }
+        }),
+        catchError((error) => {
+          console.error("UserService-CheckTokenValidity: ", error);
           return of(false);
-        }
-      }),
-      catchError((error) => {
-        console.error("UserService-CheckTokenValidity: ", error);
-        return of(false);
-      })
-    );
+        })
+      );
+    } else {
+      return of(false);
+    }
   }
 
   public findById(userId: number): Observable<User> {
