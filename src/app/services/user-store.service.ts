@@ -16,7 +16,13 @@ export class UserStoreService {
   }
 
   get token(): string {
-    return localStorage.getItem(this.USER_TOKEN);
+    const token = localStorage.getItem(this.USER_TOKEN);
+
+    if (token) {
+      return localStorage.getItem(this.USER_TOKEN);
+    } else {
+      return null;
+    }
   }
 
   setUser(user: User) {
@@ -30,11 +36,15 @@ export class UserStoreService {
 
   getUser() {
     const base64User = localStorage.getItem(this.UID);
-    const jsonUser = this.decodeFromBase64Unicode(base64User);
-    
-    const user: User = JSON.parse(jsonUser);
+    if (base64User) {
+      const jsonUser = this.decodeFromBase64Unicode(base64User);
 
-    return user;
+      const user: User = JSON.parse(jsonUser);
+
+      return user;
+    } else {
+      return null;
+    }
   }
 
   reset() {
