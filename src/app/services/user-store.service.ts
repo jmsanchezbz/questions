@@ -35,8 +35,9 @@ export class UserStoreService {
   }
 
   getUser() {
+    const token = localStorage.getItem(this.USER_TOKEN);
     const base64User = localStorage.getItem(this.UID);
-    if (base64User) {
+    if (token && base64User) {
       const jsonUser = this.decodeFromBase64Unicode(base64User);
 
       const user: User = JSON.parse(jsonUser);
@@ -49,6 +50,7 @@ export class UserStoreService {
 
   reset() {
     localStorage.removeItem(this.USER_TOKEN);
+    localStorage.removeItem(this.UID);
     this.user = null;
     this.token = null;
   }

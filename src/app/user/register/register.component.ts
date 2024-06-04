@@ -175,7 +175,6 @@ export class RegisterComponent implements OnInit {
       password: "",
     });
 
-
     if (this.isAdmin) {
       this.registerForm.get("role").enable();
     }
@@ -238,9 +237,9 @@ export class RegisterComponent implements OnInit {
   }
 
   formSubmit() {
-    console.log("formSubmit", this.userId);
+    console.log("formSubmit", this.userId, this.userId >= 0);
 
-    if (this.userId >= 0) {
+    if (this.userId && this.userId >= 0) {
       this.editProfile();
     } else {
       this.register();
@@ -279,12 +278,19 @@ export class RegisterComponent implements OnInit {
               this.message = response.msg;
             }
           },
-          error: (error: HttpErrorResponse) => {
+          error: async (error: HttpErrorResponse) => {
             console.error("RegisterComponent-register: ", error);
             this.message = error.error.msg;
-            this.errorResponse = error.error;
+            const resp = this.sharedService.from(error);
+            this.errorResponse = resp;
             this.responseOK = false;
-            throw error;
+
+            await this.sharedService.managementToast(
+              "feedback",
+              this.responseOK,
+              this.errorResponse
+            );
+            this.sharedService.errorLog(this.errorResponse);
           },
           complete: async () => {
             console.info("RegisterComponent-register->complete");
@@ -340,8 +346,9 @@ export class RegisterComponent implements OnInit {
           error: async (error: HttpErrorResponse) => {
             console.error("RegisterComponent-edit: ", error);
             this.message = error.message;
-            this.errorResponse = error.error;
-            this.responseOK = false;
+            const resp = this.sharedService.from(error);
+            this.errorResponse = resp;
+            
             await this.sharedService.managementToast(
               "feedback",
               this.responseOK,
