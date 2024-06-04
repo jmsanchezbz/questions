@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { StatsTheme } from "../model/stats-theme";
 import { StatsThemeQuestion } from "../model/stats-theme-question";
 import { QuestionFilterChange } from "../model/question-filter-change";
-import { Observable } from "rxjs";
+import { catchError, Observable, tap } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -32,11 +32,16 @@ export class StatsService {
 
     const path = queryString ? `?${queryString}` : "";
 
-    return this.http.get<StatsTheme[]>(`${this.basePath}/themes${path}`);
+    return this.http
+      .get<StatsTheme[]>(`${this.basePath}/themes${path}`)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   tQuestions(params: QuestionFilterChange): Observable<StatsThemeQuestion[]> {
-    console.log(`StatsService.findAll ${this.basePath}/themes/questions`, params);
+    console.log(
+      `StatsService.findAll ${this.basePath}/themes/questions`,
+      params
+    );
 
     const filterParams = Object.keys(params).filter(
       (key) =>
@@ -51,7 +56,9 @@ export class StatsService {
       .join("&");
 
     const path = queryString ? `?${queryString}` : "";
-    
-    return this.http.get<StatsThemeQuestion[]>(`${this.basePath}/themes/questions${path}`);
+
+    return this.http
+      .get<StatsThemeQuestion[]>(`${this.basePath}/themes/questions${path}`)
+      .pipe(catchError(this.sharedService.handleError));
   }
 }
