@@ -47,6 +47,7 @@ export class UserService {
           }
         }),
         catchError((error) => {
+          this.userStoreService.reset();
           console.error("UserService-CheckTokenValidity: ", error);
           return of(false);
         })
