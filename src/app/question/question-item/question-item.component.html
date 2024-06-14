@@ -1,4 +1,4 @@
-<div class="question" [ngClass]="{'question-answered':!trialCompleted && selected}">
+<div class="question" [ngClass]="{'question-answered':index>=0 && !trialCompleted && selected}">
     <h4><label id="radio-group-label">{{myIndex}}.
             <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
             {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()"
@@ -7,17 +7,17 @@
     <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
         (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
         <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
-            <strong>A.</strong> {{ question.option1 }}<app-check-indicator *ngIf="index==-1 || trialCompleted" [option]="1"
-                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>A.</strong> {{ question.option1 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
+                [option]="1" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o2" class="radio-button" [value]="2">
-            <strong>B.</strong> {{ question.option2 }}<app-check-indicator *ngIf="index==-1 || trialCompleted" [option]="2"
-                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>B.</strong> {{ question.option2 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
+                [option]="2" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o3" class="radio-button" [value]="3">
-            <strong>C.</strong> {{ question.option3 }}<app-check-indicator *ngIf="index==-1 || trialCompleted" [option]="3"
-                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>C.</strong> {{ question.option3 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
+                [option]="3" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
         <mat-radio-button id="{{question.id}}-o4" class="radio-button" [value]="4">
-            <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="index==-1 || trialCompleted" [option]="4"
-                [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
+            <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
+                [option]="4" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
     </mat-radio-group>
 
     <section class="actions" *ngIf="index == -1 && isAuthenticated() && (!question.verified || isAdmin())">
