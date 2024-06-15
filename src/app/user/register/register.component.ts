@@ -237,14 +237,19 @@ export class RegisterComponent implements OnInit {
   }
 
   formSubmit() {
-    console.log("formSubmit", this.userId, this.userId >= 0);
+    const user_id = this.registerForm.get("id").value;
+    console.log(
+      "Register-formSubmit isEdit:" + (user_id && user_id >= 0),
+      this.registerForm.get("id").value
+    );
 
-    if (this.userId && this.userId >= 0) {
+    if (user_id && user_id > 0) {
       this.editProfile();
     } else {
       this.register();
     }
   }
+  
   private register() {
     this.formSubmitted = true;
 
@@ -348,7 +353,7 @@ export class RegisterComponent implements OnInit {
             this.message = error.message;
             const resp = this.sharedService.from(error);
             this.errorResponse = resp;
-            
+
             await this.sharedService.managementToast(
               "feedback",
               this.responseOK,
