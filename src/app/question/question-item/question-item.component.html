@@ -2,7 +2,8 @@
     <h4><label id="radio-group-label">{{myIndex}}.
             <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
             {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()"
-            *ngIf="(index==-1  && question.answer) || (trialCompleted && question.answer)" aria-label="Ayuda">help</mat-icon></h4>
+            *ngIf="(index==-1 && question.explanation) || (trialCompleted && question.explanation)"
+            aria-label="Ayuda">help</mat-icon></h4>
 
     <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
         (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
@@ -20,7 +21,7 @@
                 [option]="4" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
     </mat-radio-group>
 
-    <section class="actions" *ngIf="index == -1 && isAuthenticated() && (!question.verified || isAdmin())">
+    <section class="actions" *ngIf="(index == -1 && isAuthenticated() && !question.verified) || isAdmin()">
         <button mat-raised-button color="primary" type="button" (click)="edit()">Edita</button>
     </section>
 </div>
