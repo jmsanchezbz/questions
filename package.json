@@ -4,6 +4,7 @@
   "scripts": {
     "build": "ng build",
     "dev": "ng serve --configuration development",
+    "deploy:ftp": "bash ./scripts/deploy-ftp.sh",
     "proxy": "ng serve --configuration development --proxy-config proxy.conf.json",
     "start": "ng serve",
     "test": "ng test",
