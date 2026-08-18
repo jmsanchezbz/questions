@@ -11,6 +11,7 @@ const routes: Routes = [
     path: "question",
     loadChildren: () =>
       import("./question/question.module").then((m) => m.QuestionModule),
+    canActivate: [canActivateFn],
   },
   {
     path: "trial",
