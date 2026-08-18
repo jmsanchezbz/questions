@@ -1,5 +1,5 @@
 import { AsyncPipe, UpperCasePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
@@ -13,17 +13,17 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { SharedService } from "../../shared/services/shared.service";
 
 @Component({
-  selector: "app-theme-questions",
-  standalone: true,
-  imports: [
-    MatTableModule,
-    MatIconModule,
-    MatButtonModule,
-    AsyncPipe,
-    UpperCasePipe,
-  ],
-  templateUrl: "./theme-questions.component.html",
-  styleUrl: "./theme-questions.component.scss",
+    selector: "app-theme-questions",
+    imports: [
+        MatTableModule,
+        MatIconModule,
+        MatButtonModule,
+        AsyncPipe,
+        UpperCasePipe,
+    ],
+    templateUrl: "./theme-questions.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./theme-questions.component.scss"
 })
 export class ThemeQuestionsComponent implements OnInit {
   configParams;

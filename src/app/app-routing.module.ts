@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes, provideRouter } from "@angular/router";
+import { RouterModule, Routes } from "@angular/router";
 import { QuestionRoutingModule } from "./question/question-routing.module";
 import { UserRoutingModule } from "./user/user-routing.module";
 import { TrialRoutingModule } from "./trial/trial-routing.module";
@@ -34,7 +34,11 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {
+      errorHandler: (error) => {
+        console.error("Router navigation error", error);
+      },
+    }),
     QuestionRoutingModule,
     UserRoutingModule,
     TrialRoutingModule,

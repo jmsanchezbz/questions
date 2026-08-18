@@ -1,184 +1,193 @@
 <div class="container">
-    <h1>Pregunta {{ isUserAdmin? '(id:'+ question.id + ')':''}}</h1>
+  <h1>Pregunta {{ isUserAdmin? '(id:'+ question.id + ')':''}}</h1>
 </div>
-<ng-template [ngIf]="isUserAdmin" [ngIfElse]="notUserAdmin">
-    <div class="question">
-        <form [formGroup]="questionForm" (ngSubmit)="submitQuestion()">
-            <section>
-                <mat-form-field>
-                    <mat-label>Entidad</mat-label>
-                    <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="administration">
-                        <mat-option disabled value="">Selecciona</mat-option>
-                        <mat-option value="caib">CAIB</mat-option>
-                        <mat-option value="imas">CIMAS</mat-option>
-                        <mat-option value="goib">Goib</mat-option>
-                        <mat-option value="local">Local</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Grupo</mat-label>
-                    <mat-select id="cbxGroup" name="cbxGroup" formControlName="grup">
-                        <mat-option disabled value="">Selecciona</mat-option>
-                        <mat-option *ngFor="let g of groups; index as i" [value]="g">
-                            {{ g | uppercase }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Tema</mat-label>
-                    <mat-select id="cbxTheme" name="cbxTheme" formControlName="theme">
-                        <mat-option disabled value="">Selecciona</mat-option>
-                        <mat-option *ngFor="let theme of themes; index as i" [value]="theme">
-                            Tema {{ theme }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-checkbox class="checkbox-margin" formControlName="verified">Verificada</mat-checkbox>
-                <br>
-                <mat-form-field appearance="fill">
-                    <mat-label>Número de pregunta</mat-label>
-                    <input matInput type="text" formControlName="number" placeholder="Número de pregunta" />
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Pregunta</mat-label>
-                    <textarea matInput formControlName="question" placeholder="Pregunta"></textarea>
-                    <!--<mat-error *ngIf="questionForm.get('email')?.dirty || formSubmitted">
-                    <span *ngIf="questionForm.get('email')?.hasError('required')">Correo electrónico es
-                        obligatorio</span>
-                    <span *ngIf="questionForm.get('email')?.hasError('email')">Correo electrónico debe ser
-                        válido</span>
-                </mat-error>-->
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Opción A</mat-label>
-                    <textarea matInput formControlName="option1" placeholder="Opción 1" rows="4"></textarea>
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Opción B</mat-label>
-                    <textarea matInput formControlName="option2" placeholder="Opción 2" rows="4"></textarea>
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Opción C</mat-label>
-                    <textarea matInput formControlName="option3" placeholder="Opción 3" rows="4"></textarea>
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Opción D</mat-label>
-                    <textarea matInput formControlName="option4" placeholder="Opción 4" rows="4"></textarea>
-                </mat-form-field>
-            </section>
-            <hr class="mb-1">
-            <section>
-                <mat-form-field>
-                    <mat-label>Respuesta</mat-label>
-                    <mat-select id="cbxResponse" name="cbxResponse" formControlName="answer">
-                        <mat-option disabled value="">Selecciona</mat-option>
-                        <mat-option value="1">A</mat-option>
-                        <mat-option value=2>B</mat-option>
-                        <mat-option value="3">C</mat-option>
-                        <mat-option value="4">D</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Explicación</mat-label>
-                    <textarea matInput formControlName="explanation" placeholder="Explicación" rows="10"></textarea>
-                </mat-form-field>
-            </section>
-            <section class="actions">
-                <button mat-button type="button" (click)="goHome()">Cancelar</button>
-                <button mat-raised-button color="primary" type="submit">Guardar</button>
-            </section>
-        </form>
-    </div>
-</ng-template>
+@if (isUserAdmin) {
+  <div class="question">
+    <form [formGroup]="questionForm" (ngSubmit)="submitQuestion()">
+      <section>
+        <mat-form-field>
+          <mat-label>Entidad</mat-label>
+          <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="administration">
+            <mat-option disabled value="">Selecciona</mat-option>
+            <mat-option value="caib">CAIB</mat-option>
+            <mat-option value="imas">CIMAS</mat-option>
+            <mat-option value="goib">Goib</mat-option>
+            <mat-option value="local">Local</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Grupo</mat-label>
+          <mat-select id="cbxGroup" name="cbxGroup" formControlName="grup">
+            <mat-option disabled value="">Selecciona</mat-option>
+            @for (g of groups; track g; let i = $index) {
+              <mat-option [value]="g">
+                {{ g | uppercase }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Tema</mat-label>
+          <mat-select id="cbxTheme" name="cbxTheme" formControlName="theme">
+            <mat-option disabled value="">Selecciona</mat-option>
+            @for (theme of themes; track theme; let i = $index) {
+              <mat-option [value]="theme">
+                Tema {{ theme }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-checkbox class="checkbox-margin" formControlName="verified">Verificada</mat-checkbox>
+        <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Número de pregunta</mat-label>
+            <input matInput type="text" formControlName="number" placeholder="Número de pregunta" />
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Pregunta</mat-label>
+            <textarea matInput formControlName="question" placeholder="Pregunta"></textarea>
+            <!--<mat-error *ngIf="questionForm.get('email')?.dirty || formSubmitted">
+            <span *ngIf="questionForm.get('email')?.hasError('required')">Correo electrónico es
+            obligatorio</span>
+            <span *ngIf="questionForm.get('email')?.hasError('email')">Correo electrónico debe ser
+            válido</span>
+          </mat-error>-->
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Opción A</mat-label>
+          <textarea matInput formControlName="option1" placeholder="Opción 1" rows="4"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Opción B</mat-label>
+          <textarea matInput formControlName="option2" placeholder="Opción 2" rows="4"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Opción C</mat-label>
+          <textarea matInput formControlName="option3" placeholder="Opción 3" rows="4"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Opción D</mat-label>
+          <textarea matInput formControlName="option4" placeholder="Opción 4" rows="4"></textarea>
+        </mat-form-field>
+      </section>
+      <hr class="mb-1">
+      <section>
+        <mat-form-field>
+          <mat-label>Respuesta</mat-label>
+          <mat-select id="cbxResponse" name="cbxResponse" formControlName="answer">
+            <mat-option disabled value="">Selecciona</mat-option>
+            <mat-option value="1">A</mat-option>
+            <mat-option value=2>B</mat-option>
+            <mat-option value="3">C</mat-option>
+            <mat-option value="4">D</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Explicación</mat-label>
+          <textarea matInput formControlName="explanation" placeholder="Explicación" rows="10"></textarea>
+        </mat-form-field>
+      </section>
+      <section class="actions">
+        <button mat-button type="button" (click)="goHome()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+      </section>
+    </form>
+  </div>
+} @else {
+  <div class="question">
+    <section>
+      <mat-form-field>
+        <mat-label>Entidad</mat-label>
+        <mat-select id="cbxEntidad" name="cbxEntidad" [(ngModel)]="question.administration" disabled>
+          <mat-option disabled value="">Selecciona</mat-option>
+          <mat-option value="caib">CAIB</mat-option>
+          <mat-option value="local">Local</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Grupo</mat-label>
+        <mat-select id="cbxGroup" name="cbxGroup" [(ngModel)]="question.grup" disabled>
+          <mat-option disabled value="">Selecciona</mat-option>
+          @for (g of groups; track g; let i = $index) {
+            <mat-option [value]="g">
+              {{ g | uppercase }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Tema</mat-label>
+        <mat-select id="cbxTheme" name="cbxTheme" [(ngModel)]="question.theme" disabled>
+          <mat-option disabled value="">Selecciona</mat-option>
+          @for (theme of themes; track theme; let i = $index) {
+            <mat-option [value]="theme">
+              Tema {{ theme }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox class="checkbox-margin" [(ngModel)]="question.verified" disabled>Verificada</mat-checkbox>
+      <br>
+        <mat-form-field appearance="fill">
+          <mat-label>Número de pregunta</mat-label>
+          <input matInput type="text" [(ngModel)]="question.number" placeholder="Número de pregunta" disabled />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Pregunta</mat-label>
+          <textarea matInput placeholder="Pregunta" disabled>{{question.question}}</textarea>
+          <!--<mat-error *ngIf="questionForm.get('email')?.dirty || formSubmitted">
+          <span *ngIf="questionForm.get('email')?.hasError('required')">Correo electrónico es
+          obligatorio</span>
+          <span *ngIf="questionForm.get('email')?.hasError('email')">Correo electrónico debe ser
+          válido</span>
+        </mat-error>-->
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Opción A</mat-label>
+        <textarea matInput placeholder="Opción 1" rows="4" disabled>{{question.option1}}</textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Opción B</mat-label>
+        <textarea matInput placeholder="Opción 2" rows="4" disabled>{{question.option2}}</textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Opción C</mat-label>
+        <textarea matInput placeholder="Opción 3" rows="4" disabled>{{question.option3}}</textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Opción D</mat-label>
+        <textarea matInput placeholder="Opción 4" rows="4" disabled>{{question.option4}}</textarea>
+      </mat-form-field>
+    </section>
+    <hr class="mb-1">
+    <form [formGroup]="answerForm" (ngSubmit)="submitAnswer()">
+      <section>
+        <mat-form-field>
+          <mat-label>Respuesta</mat-label>
+          <mat-select id="cbxResponse" name="cbxResponse" formControlName="answer">
+            <mat-option disabled value="">Selecciona</mat-option>
+            <mat-option value="1">A</mat-option>
+            <mat-option value=2>B</mat-option>
+            <mat-option value="3">C</mat-option>
+            <mat-option value="4">D</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Explicación</mat-label>
+          <textarea matInput formControlName="explanation" placeholder="Explicación" rows="10"></textarea>
+        </mat-form-field>
+      </section>
+      <section class="actions">
+        <button mat-button type="button" (click)="goHome()">Cancelar</button>
+        @if (!question.verified) {
+          <button mat-raised-button color="primary" type="submit">Guardar</button>
+        }
+      </section>
+    </form>
+  </div>
+}
 <!-- Users not admin -->
-<ng-template #notUserAdmin>
-    <div class="question">
-        <section>
-            <mat-form-field>
-                <mat-label>Entidad</mat-label>
-                <mat-select id="cbxEntidad" name="cbxEntidad" [(ngModel)]="question.administration" disabled>
-                    <mat-option disabled value="">Selecciona</mat-option>
-                    <mat-option value="caib">CAIB</mat-option>
-                    <mat-option value="local">Local</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Grupo</mat-label>
-                <mat-select id="cbxGroup" name="cbxGroup" [(ngModel)]="question.grup" disabled>
-                    <mat-option disabled value="">Selecciona</mat-option>
-                    <mat-option *ngFor="let g of groups; index as i" [value]="g">
-                        {{ g | uppercase }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Tema</mat-label>
-                <mat-select id="cbxTheme" name="cbxTheme" [(ngModel)]="question.theme" disabled>
-                    <mat-option disabled value="">Selecciona</mat-option>
-                    <mat-option *ngFor="let theme of themes; index as i" [value]="theme">
-                        Tema {{ theme }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-checkbox class="checkbox-margin" [(ngModel)]="question.verified" disabled>Verificada</mat-checkbox>
-            <br>
-            <mat-form-field appearance="fill">
-                <mat-label>Número de pregunta</mat-label>
-                <input matInput type="text" [(ngModel)]="question.number" placeholder="Número de pregunta" disabled />
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Pregunta</mat-label>
-                <textarea matInput placeholder="Pregunta" disabled>{{question.question}}</textarea>
-                <!--<mat-error *ngIf="questionForm.get('email')?.dirty || formSubmitted">
-                <span *ngIf="questionForm.get('email')?.hasError('required')">Correo electrónico es
-                    obligatorio</span>
-                <span *ngIf="questionForm.get('email')?.hasError('email')">Correo electrónico debe ser
-                    válido</span>
-            </mat-error>-->
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Opción A</mat-label>
-                <textarea matInput placeholder="Opción 1" rows="4" disabled>{{question.option1}}</textarea>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Opción B</mat-label>
-                <textarea matInput placeholder="Opción 2" rows="4" disabled>{{question.option2}}</textarea>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Opción C</mat-label>
-                <textarea matInput placeholder="Opción 3" rows="4" disabled>{{question.option3}}</textarea>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Opción D</mat-label>
-                <textarea matInput placeholder="Opción 4" rows="4" disabled>{{question.option4}}</textarea>
-            </mat-form-field>
-        </section>
-        <hr class="mb-1">
-        <form [formGroup]="answerForm" (ngSubmit)="submitAnswer()">
-            <section>
-                <mat-form-field>
-                    <mat-label>Respuesta</mat-label>
-                    <mat-select id="cbxResponse" name="cbxResponse" formControlName="answer">
-                        <mat-option disabled value="">Selecciona</mat-option>
-                        <mat-option value="1">A</mat-option>
-                        <mat-option value=2>B</mat-option>
-                        <mat-option value="3">C</mat-option>
-                        <mat-option value="4">D</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Explicación</mat-label>
-                    <textarea matInput formControlName="explanation" placeholder="Explicación" rows="10"></textarea>
-                </mat-form-field>
-            </section>
-            <section class="actions">
-                <button mat-button type="button" (click)="goHome()">Cancelar</button>
-                <button mat-raised-button color="primary" type="submit" *ngIf="!question.verified">Guardar</button>
-            </section>
-        </form>
-    </div>
-</ng-template>

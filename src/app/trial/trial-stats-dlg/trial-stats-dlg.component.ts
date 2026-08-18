@@ -1,12 +1,9 @@
-import { Component, Inject, Input } from "@angular/core";
-import { NumberToLetterPipe } from "../../shared/pipes/number-to-letter.pipe";
+import { Component, Inject, Input, ChangeDetectionStrategy } from "@angular/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatIconModule } from "@angular/material/icon";
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
@@ -24,27 +21,25 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SharedService } from '../../shared/services/shared.service';
 
 @Component({
-  selector: "app-trial-stats-dlg",
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatListModule,
-    MatIconModule,
-    MatSelectModule,
-    NumberToLetterPipe,
-    TrialDoneIndicatorComponent,
-  ],
-  templateUrl: "./trial-stats-dlg.component.html",
-  styleUrl: "./trial-stats-dlg.component.scss",
+    selector: "app-trial-stats-dlg",
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        MatButtonModule,
+        MatDialogTitle,
+        MatDialogContent,
+        MatDialogActions,
+        MatListModule,
+        MatIconModule,
+        MatSelectModule,
+        TrialDoneIndicatorComponent,
+    ],
+    templateUrl: "./trial-stats-dlg.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./trial-stats-dlg.component.scss"
 })
 export class TrialStatsDlgComponent {
   private message: string;

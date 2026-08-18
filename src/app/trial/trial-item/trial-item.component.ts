@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { Trial } from "../../model/trial";
 import { ActivatedRoute } from "@angular/router";
 import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { QuestionItemComponent } from "../../question/question-item/question-item.component";
-import { AsyncPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { catchError, Observable, of } from "rxjs";
 import { TrialQuestion } from "../../model/trial-question";
 import { TrialService } from "../../services/trial.service";
@@ -16,9 +16,8 @@ import { TrialStatsDlgComponent } from "../trial-stats-dlg/trial-stats-dlg.compo
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: "app-trial-item",
-  standalone: true,
-  imports: [
+    selector: "app-trial-item",
+    imports: [
     MatFormField,
     MatLabel,
     MatSelect,
@@ -26,12 +25,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     QuestionItemComponent,
     AsyncPipe,
-    NgIf,
-    NgFor,
     MatIconModule
-  ],
-  templateUrl: "./trial-item.component.html",
-  styleUrl: "./trial-item.component.scss",
+],
+    templateUrl: "./trial-item.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./trial-item.component.scss"
 })
 export class TrialItemComponent implements OnInit {
   adm: string;

@@ -1,44 +1,50 @@
 <div>
-    <div class="container">
-        <h1>{{name}} {{trial.theme?trial.theme:''}} <mat-icon class="default-color" *ngIf="trial.is_completed">done_outline</mat-icon></h1>
-    </div>
+  <div class="container">
+    <h1>{{name}} {{trial.theme?trial.theme:''}} @if (trial.is_completed) {
+      <mat-icon class="default-color">done_outline</mat-icon>
+    }</h1>
+  </div>
 
-    <div class="filter-form">
-        <mat-form-field>
-            <mat-label>Entidad</mat-label>
-            <mat-select id="cbxEntidad" name="cbxEntidad" [value]="adm" disabled>
-                <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option value="caib">CAIB</mat-option>
-                <mat-option value="imas">CIMAS</mat-option>
-                <mat-option value="goib">Goib</mat-option>
-                <mat-option value="local">Local</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Grupo</mat-label>
-            <mat-select id="cbxGroup" name="cbxGroup" [value]="grp" disabled>
-                <mat-option [value]="grp">{{ grp }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="hideTheme">
-            <mat-label>Tema</mat-label>
-            <mat-select id="cbxTheme" name="cbxTheme" [value]="thm" disabled>
-                <mat-option [value]="thm">Tema {{ thm }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="openDialog()">
-            {{trial.is_completed?'Estadísticas':'Finaliza examen'}}
-        </button>
-    </div>
+  <div class="filter-form">
+    <mat-form-field>
+      <mat-label>Entidad</mat-label>
+      <mat-select id="cbxEntidad" name="cbxEntidad" [value]="adm" disabled>
+        <mat-option disabled value="">Selecciona</mat-option>
+        <mat-option value="caib">CAIB</mat-option>
+        <mat-option value="imas">CIMAS</mat-option>
+        <mat-option value="goib">Goib</mat-option>
+        <mat-option value="local">Local</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Grupo</mat-label>
+      <mat-select id="cbxGroup" name="cbxGroup" [value]="grp" disabled>
+        <mat-option [value]="grp">{{ grp }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    @if (hideTheme) {
+      <mat-form-field>
+        <mat-label>Tema</mat-label>
+        <mat-select id="cbxTheme" name="cbxTheme" [value]="thm" disabled>
+          <mat-option [value]="thm">Tema {{ thm }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      {{trial.is_completed?'Estadísticas':'Finaliza examen'}}
+    </button>
+  </div>
 
-    <!-- question list -->
-    <div class="question-list">
-        <div *ngFor="let tQuestion of tQuestions$ | async; index as i; trackBy: trackById">
-            <app-question-item (answerSelected)="onAnswerSelected($event)" [index]="i" [tQuestion]="tQuestion"
-                [trialCompleted]="trial.is_completed"></app-question-item>
-        </div>
-    </div>
+  <!-- question list -->
+  <div class="question-list">
+    @for (tQuestion of tQuestions$ | async; track trackById(i, tQuestion); let i = $index) {
+      <div>
+        <app-question-item (answerSelected)="onAnswerSelected($event)" [index]="i" [tQuestion]="tQuestion"
+        [trialCompleted]="trial.is_completed"></app-question-item>
+      </div>
+    }
+  </div>
 </div>
 <button class="br-fixed my-btn" mat-icon-button aria-label="Flecha hacia arriba" (click)="scrollToTop()">
-    <mat-icon>arrow_upward</mat-icon>
+  <mat-icon>arrow_upward</mat-icon>
 </button>

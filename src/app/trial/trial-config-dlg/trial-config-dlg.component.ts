@@ -1,5 +1,5 @@
-import { CommonModule, UpperCasePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { UpperCasePipe } from "@angular/common";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -11,26 +11,21 @@ import {
 import { MatButtonModule } from "@angular/material/button";
 import {
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogRef,
   MatDialogTitle,
 } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { NumberToLetterPipe } from "../../shared/pipes/number-to-letter.pipe";
-import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";import { MatSelectModule } from "@angular/material/select";
 import { TrialService } from "../../services/trial.service";
 import { SharedService } from "../../shared/services/shared.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-trial-config-dlg",
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: "app-trial-config-dlg",
+    imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -39,13 +34,12 @@ import { Router } from "@angular/router";
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
     MatIconModule,
-    MatSelectModule,
-    NumberToLetterPipe,
-  ],
-  templateUrl: "./trial-config-dlg.component.html",
-  styleUrl: "./trial-config-dlg.component.scss",
+    MatSelectModule
+],
+    templateUrl: "./trial-config-dlg.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./trial-config-dlg.component.scss"
 })
 export class TrialConfigDlgComponent implements OnInit {
   public trialForm: FormGroup;
@@ -124,7 +118,7 @@ export class TrialConfigDlgComponent implements OnInit {
       },
       complete: async () => {
         console.info("TrialDlg-submit->complete");
-        
+
         await this.sharedService.managementToast(
           "feedback",
           this.responseOK,

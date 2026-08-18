@@ -1,25 +1,23 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { UserService } from "../../services/user.service";
-import { NgIf } from "@angular/common";
-import { Router, RouterLink } from "@angular/router";
+
+import { Router } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 @Component({
-  selector: "app-menu",
-  templateUrl: "./menu.component.html",
-  styleUrl: "./menu.component.scss",
-  standalone: true,
-  imports: [
-    RouterLink,
-    NgIf,
+    selector: "app-menu",
+    templateUrl: "./menu.component.html",
+    styleUrl: "./menu.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    MatToolbarModule,
-  ],
+    MatToolbarModule
+]
 })
 export class MenuComponent {
   constructor(private router: Router, private userService: UserService) {}

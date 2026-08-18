@@ -1,11 +1,24 @@
 
-<ng-container *ngIf="show()">
-    <ng-container *ngIf="format=='-1'">{{perRight}}%</ng-container>
-    <ng-container *ngIf="format=='-2'">({{perRight}}%)</ng-container>
-    <ng-container *ngIf="format=='1'">{{perWrong}}%</ng-container>
-    <ng-container *ngIf="format=='2'">({{perWrong}}%)</ng-container>
-
-    <mat-icon *ngIf="perWrong<20" class="green">gpp_good</mat-icon>
-    <mat-icon *ngIf="perWrong>=20 && perWrong<=60" class="yellow">gpp_maybe</mat-icon>
-    <mat-icon *ngIf="perWrong>60" class="red">gpp_bad</mat-icon>
-</ng-container>
+@if (show()) {
+  @if (format=='-1') {
+    {{perRight}}%
+  }
+  @if (format=='-2') {
+    ({{perRight}}%)
+  }
+  @if (format=='1') {
+    {{perWrong}}%
+  }
+  @if (format=='2') {
+    ({{perWrong}}%)
+  }
+  @if (perWrong<20) {
+    <mat-icon class="green">gpp_good</mat-icon>
+  }
+  @if (perWrong>=20 && perWrong<=60) {
+    <mat-icon class="yellow">gpp_maybe</mat-icon>
+  }
+  @if (perWrong>60) {
+    <mat-icon class="red">gpp_bad</mat-icon>
+  }
+}

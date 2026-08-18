@@ -4,9 +4,8 @@ import {
   Component,
   OnInit,
   ViewChild,
-} from "@angular/core";
-import { QuestionFilterComponent } from "../../question/question-filter/question-filter.component";
-import { QuestionFilterChange } from "../../model/question-filter-change";
+  ChangeDetectionStrategy
+} from "@angular/core";import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
 import {
   catchError,
@@ -23,13 +22,7 @@ import {
 import { TrialService } from "../../services/trial.service";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { Trial } from "../../model/trial";
-import {
-  AsyncPipe,
-  DatePipe,
-  NgClass,
-  NgIf,
-  UpperCasePipe,
-} from "@angular/common";
+import { DatePipe, NgClass, UpperCasePipe } from "@angular/common";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TrialDoneIndicatorComponent } from "../trial-done-indicator/trial-done-indicator.component";
 import { MatIconModule } from "@angular/material/icon";
@@ -43,24 +36,21 @@ import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
-  selector: "app-trial-list",
-  standalone: true,
-  imports: [
-    QuestionFilterComponent,
+    selector: "app-trial-list",
+    imports: [
     TrialDoneIndicatorComponent,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
-    AsyncPipe,
     DatePipe,
     NgClass,
-    NgIf,
     MatSortModule,
     UpperCasePipe,
-    MatTooltipModule,
-  ],
-  templateUrl: "./trial-list.component.html",
-  styleUrl: "./trial-list.component.scss",
+    MatTooltipModule
+],
+    templateUrl: "./trial-list.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./trial-list.component.scss"
 })
 export class TrialListComponent
   implements OnInit, AfterViewInit, AfterContentInit

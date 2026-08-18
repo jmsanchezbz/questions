@@ -1,20 +1,22 @@
 <div class="main">
-    <div class="container">
-        <h1>Questions</h1>
-    </div>
-    <!-- new question form -->
-    <div class="filter-form">
-        <app-question-filter (filterChanged)="onFilterChanged($event)" [themes]="themes" [groups]="groups"
-            [filter]="filter"></app-question-filter>
-    </div>
+  <div class="container">
+    <h1>Questions</h1>
+  </div>
+  <!-- new question form -->
+  <div class="filter-form">
+    <app-question-filter (filterChanged)="onFilterChanged($event)" [themes]="themes" [groups]="groups"
+    [filter]="filter"></app-question-filter>
+  </div>
 
-    <!-- question list -->
-    <div class="question-list">
-        <div *ngFor="let tQuestion of tQuestions$ | async; index as id">
-            <app-question-item [index]="-1" [tQuestion]="tQuestion"></app-question-item>
-        </div>
-    </div>
-    <button class="br-fixed my-btn" mat-icon-button aria-label="Flecha hacia arriba" (click)="scrollToTop()">
-        <mat-icon>arrow_upward</mat-icon>
-    </button>
+  <!-- question list -->
+  <div class="question-list">
+    @for (tQuestion of tQuestions$ | async; track tQuestion; let id = $index) {
+      <div>
+        <app-question-item [index]="-1" [tQuestion]="tQuestion"></app-question-item>
+      </div>
+    }
+  </div>
+  <button class="br-fixed my-btn" mat-icon-button aria-label="Flecha hacia arriba" (click)="scrollToTop()">
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
 </div>

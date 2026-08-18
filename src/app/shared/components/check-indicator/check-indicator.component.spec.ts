@@ -8,10 +8,10 @@ describe('CheckIndicatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CheckIndicatorComponent]
+      imports: [CheckIndicatorComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CheckIndicatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

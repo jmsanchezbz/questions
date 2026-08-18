@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 import { of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
-import { NgIf, NgClass } from "@angular/common";
+
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
@@ -20,20 +20,18 @@ import { SharedService } from "../../shared/services/shared.service";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrl: "./login.component.scss",
-  standalone: true,
-  imports: [
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrl: "./login.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
-    NgClass,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule,
-  ],
+    MatCardModule
+]
 })
 export class LoginComponent {
   public loginForm: FormGroup;
@@ -106,7 +104,7 @@ export class LoginComponent {
               this.responseOK,
               this.errorResponse
             );
-            
+
             if (this.responseOK) {
               this.router.navigate([""]);
             }

@@ -12,17 +12,19 @@
       </button>
       <mat-menu #menu="matMenu" [overlapTrigger]="false">
         <span (mouseleave)="menuTrigger.closeMenu()">
-          <ng-container *ngIf="!isAuthenticated()">
+          @if (!isAuthenticated()) {
             <button mat-menu-item (click)="login()">
               <mat-icon>login</mat-icon>
               <span>Inicia sesión</span>
             </button>
-            <button mat-menu-item (click)="register()" *ngIf="false">
-              <mat-icon>person_add_alt_1</mat-icon>
-              <span>Registro</span>
-            </button>
-          </ng-container>
-          <ng-container *ngIf="isAuthenticated()">
+            @if (false) {
+              <button mat-menu-item (click)="register()">
+                <mat-icon>person_add_alt_1</mat-icon>
+                <span>Registro</span>
+              </button>
+            }
+          }
+          @if (isAuthenticated()) {
             <button mat-menu-item (click)="themes()">
               <mat-icon>format_list_numbered</mat-icon>
               <span>Temas</span>
@@ -39,7 +41,7 @@
               <mat-icon>logout</mat-icon>
               <span>Cierra sessión</span>
             </button>
-          </ng-container>
+          }
         </span>
       </mat-menu>
     </span>
@@ -49,7 +51,7 @@
       </a>
     </div>
     <div class="menu-hor">
-      <ng-container *ngIf="!isAuthenticated()">
+      @if (!isAuthenticated()) {
         <span>
           <button mat-menu-item (click)="login()">
             <mat-icon class="white">login</mat-icon>
@@ -62,8 +64,8 @@
             <span class="white">Registro</span>
           </button>
         </span>
-      </ng-container>
-      <ng-container *ngIf="isAuthenticated()">
+      }
+      @if (isAuthenticated()) {
         <span>
           <button mat-menu-item (click)="themes()">
             <mat-icon class="white">format_list_numbered</mat-icon>
@@ -88,7 +90,7 @@
             <span class="white">Cierre sesión</span>
           </button>
         </span>
-      </ng-container>
+      }
     </div>
   </mat-toolbar>
 </div>

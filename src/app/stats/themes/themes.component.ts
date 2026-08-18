@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -30,19 +30,19 @@ export interface PeriodicElement {
 }
 
 @Component({
-  selector: "app-themes",
-  standalone: true,
-  imports: [
-    QuestionFilterComponent,
-    TrialDoneIndicatorComponent,
-    MatTableModule,
-    MatIconModule,
-    MatButtonModule,
-    AsyncPipe,
-    MatTooltipModule
-  ],
-  templateUrl: "./themes.component.html",
-  styleUrl: "./themes.component.scss",
+    selector: "app-themes",
+    imports: [
+        QuestionFilterComponent,
+        TrialDoneIndicatorComponent,
+        MatTableModule,
+        MatIconModule,
+        MatButtonModule,
+        AsyncPipe,
+        MatTooltipModule
+    ],
+    templateUrl: "./themes.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./themes.component.scss"
 })
 export class ThemesComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";

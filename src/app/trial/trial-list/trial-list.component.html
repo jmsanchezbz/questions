@@ -1,64 +1,70 @@
 <div>
-    <div class="container">
-        <h1>Exámenes</h1>
-    </div>
-    <div class="button-container">
-        <button mat-raised-button color="primary" (click)="openDialog()">
-            Nuevo examen
-        </button>
-    </div>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 my-table" matSort
-        (matSortChange)="announceSortChange($event)">
+  <div class="container">
+    <h1>Exámenes</h1>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      Nuevo examen
+    </button>
+  </div>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 my-table" matSort
+    (matSortChange)="announceSortChange($event)">
 
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef class="responsive-display">id</th>
-            <td mat-cell *matCellDef="let item" class="responsive-display">{{item.id}}</td>
-        </ng-container>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef class="responsive-display">id</th>
+      <td mat-cell *matCellDef="let item" class="responsive-display">{{item.id}}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="is_completed">
-            <th mat-header-cell *matHeaderCellDef class="responsive-display">Estado</th>
-            <td mat-cell *matCellDef="let item" class="responsive-display">
-                <mat-icon *ngIf="!item.is_completed" class="yellow">question_mark</mat-icon>
-                <mat-icon *ngIf="item.is_completed" class="green">done</mat-icon>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="is_completed">
+      <th mat-header-cell *matHeaderCellDef class="responsive-display">Estado</th>
+      <td mat-cell *matCellDef="let item" class="responsive-display">
+        @if (!item.is_completed) {
+          <mat-icon class="yellow">question_mark</mat-icon>
+        }
+        @if (item.is_completed) {
+          <mat-icon class="green">done</mat-icon>
+        }
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="updated_at">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
-            <td mat-cell *matCellDef="let item">{{item.updated_at | date:'dd/MM/yyyy hh:mm:ss' }}</td>
-        </ng-container>
+    <ng-container matColumnDef="updated_at">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let item">{{item.updated_at | date:'dd/MM/yyyy hh:mm:ss' }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Examen</th>
-            <td mat-cell *matCellDef="let item">{{item.administration | uppercase }} {{item.grup}} {{item.name}}
-                {{item.theme}}</td>
-        </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Examen</th>
+      <td mat-cell *matCellDef="let item">{{item.administration | uppercase }} {{item.grup}} {{item.name}}
+      {{item.theme}}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="num_questions">
-            <th mat-header-cell *matHeaderCellDef class="responsive-display">Preguntas</th>
-            <td mat-cell *matCellDef="let item" class="responsive-display">{{item.num_questions}}</td>
-        </ng-container>
+    <ng-container matColumnDef="num_questions">
+      <th mat-header-cell *matHeaderCellDef class="responsive-display">Preguntas</th>
+      <td mat-cell *matCellDef="let item" class="responsive-display">{{item.num_questions}}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="num_mistakes">
-            <th mat-header-cell *matHeaderCellDef class="shield">Errores <mat-icon class="default-color" matTooltipClass="tooltip"
-                    matTooltip="<20% Verde &#10; Entre 20% y 60% Amarillo &#10; >60% Rojo"
-                    aria-label="Información de los errores">info_outline</mat-icon></th>
-            <td mat-cell *matCellDef="let item" class="shield">
-                <app-trial-done-indicator *ngIf="item.is_completed" [numMistakes]="item.num_mistakes"
-                    [numQuestions]="item.num_questions" format="1"></app-trial-done-indicator>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="num_mistakes">
+      <th mat-header-cell *matHeaderCellDef class="shield">Errores <mat-icon class="default-color" matTooltipClass="tooltip"
+        matTooltip="<20% Verde &#10; Entre 20% y 60% Amarillo &#10; >60% Rojo"
+      aria-label="Información de los errores">info_outline</mat-icon></th>
+      <td mat-cell *matCellDef="let item" class="shield">
+        @if (item.is_completed) {
+          <app-trial-done-indicator [numMistakes]="item.num_mistakes"
+          [numQuestions]="item.num_questions" format="1"></app-trial-done-indicator>
+        }
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef><span class="responsive-display">Acciones</span></th>
-            <td mat-cell *matCellDef="let row">
-                <!--<button mat-raised-button color="primary" (click)="trial(row)">Examen</button>-->
-                <button mat-icon-button color="primary" (click)="trial(row)"><mat-icon>menu_book</mat-icon>
-                </button>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef><span class="responsive-display">Acciones</span></th>
+      <td mat-cell *matCellDef="let row">
+        <!--<button mat-raised-button color="primary" (click)="trial(row)">Examen</button>-->
+        <button mat-icon-button color="primary" (click)="trial(row)"><mat-icon>menu_book</mat-icon>
+      </button>
+    </td>
+  </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'done':row.is_completed}"></tr>
-    </table>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'done':row.is_completed}"></tr>
+</table>
 </div>

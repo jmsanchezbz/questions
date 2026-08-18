@@ -1,27 +1,40 @@
 <div class="question" [ngClass]="{'question-answered':index>=0 && !trialCompleted && selected}">
-    <h4><label id="radio-group-label">{{myIndex}}.
-            <mat-icon *ngIf="question.verified" class="green">verified</mat-icon>
-            {{ question.question }}</label> <mat-icon color="primary" (click)="openDialog()"
-            *ngIf="(index==-1 && question.explanation) || (trialCompleted && question.explanation)"
-            aria-label="Ayuda">help</mat-icon></h4>
+  <h4><label id="radio-group-label">{{myIndex}}.
+    @if (question.verified) {
+      <mat-icon class="green">verified</mat-icon>
+    }
+  {{ question.question }}</label> @if ((index==-1 && question.explanation) || (trialCompleted && question.explanation)) {
+  <mat-icon color="primary" (click)="openDialog()"
+  aria-label="Ayuda">help</mat-icon>
+}</h4>
 
-    <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
-        (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
-        <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
-            <strong>A.</strong> {{ question.option1 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
-                [option]="1" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
-        <mat-radio-button id="{{question.id}}-o2" class="radio-button" [value]="2">
-            <strong>B.</strong> {{ question.option2 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
-                [option]="2" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
-        <mat-radio-button id="{{question.id}}-o3" class="radio-button" [value]="3">
-            <strong>C.</strong> {{ question.option3 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
-                [option]="3" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
-        <mat-radio-button id="{{question.id}}-o4" class="radio-button" [value]="4">
-            <strong>D.</strong> {{ question.option4 }}<app-check-indicator *ngIf="index==-1 || trialCompleted"
-                [option]="4" [answer]="question.answer" [selected]="selected"></app-check-indicator></mat-radio-button>
-    </mat-radio-group>
+<mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
+  (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
+  <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
+    <strong>A.</strong> {{ question.option1 }}@if (index==-1 || trialCompleted) {
+    <app-check-indicator
+    [option]="1" [answer]="question.answer" [selected]="selected"></app-check-indicator>
+  }</mat-radio-button>
+  <mat-radio-button id="{{question.id}}-o2" class="radio-button" [value]="2">
+    <strong>B.</strong> {{ question.option2 }}@if (index==-1 || trialCompleted) {
+    <app-check-indicator
+    [option]="2" [answer]="question.answer" [selected]="selected"></app-check-indicator>
+  }</mat-radio-button>
+  <mat-radio-button id="{{question.id}}-o3" class="radio-button" [value]="3">
+    <strong>C.</strong> {{ question.option3 }}@if (index==-1 || trialCompleted) {
+    <app-check-indicator
+    [option]="3" [answer]="question.answer" [selected]="selected"></app-check-indicator>
+  }</mat-radio-button>
+  <mat-radio-button id="{{question.id}}-o4" class="radio-button" [value]="4">
+    <strong>D.</strong> {{ question.option4 }}@if (index==-1 || trialCompleted) {
+    <app-check-indicator
+    [option]="4" [answer]="question.answer" [selected]="selected"></app-check-indicator>
+  }</mat-radio-button>
+</mat-radio-group>
 
-    <section class="actions" *ngIf="(index == -1 && isAuthenticated() && !question.verified) || isAdmin()">
-        <button mat-raised-button color="primary" type="button" (click)="edit()">Edita</button>
-    </section>
+@if ((index == -1 && isAuthenticated() && !question.verified) || isAdmin()) {
+  <section class="actions">
+    <button mat-raised-button color="primary" type="button" (click)="edit()">Edita</button>
+  </section>
+}
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { QuestionFilterChange } from "../../model/question-filter-change";
 import {
   FormBuilder,
@@ -9,24 +9,22 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { debounceTime, tap } from "rxjs";
-import { NgFor, NgIf, UpperCasePipe } from "@angular/common";
+import { UpperCasePipe } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
 
 @Component({
-  selector: "app-question-filter",
-  templateUrl: "./question-filter.component.html",
-  styleUrl: "./question-filter.component.scss",
-  standalone: true,
-  imports: [
+    selector: "app-question-filter",
+    templateUrl: "./question-filter.component.html",
+    styleUrl: "./question-filter.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgFor,
-    NgIf,
     UpperCasePipe,
     MatFormFieldModule,
-    MatSelectModule,
-  ],
+    MatSelectModule
+]
 })
 export class QuestionFilterComponent implements OnInit {
   private readonly QTYPE = "q";

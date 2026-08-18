@@ -1,13 +1,13 @@
-import { NgIf } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+
+import { Component, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: "app-trial-done-indicator",
-  standalone: true,
-  imports: [NgIf, MatIconModule],
-  templateUrl: "./trial-done-indicator.component.html",
-  styleUrl: "./trial-done-indicator.component.scss",
+    selector: "app-trial-done-indicator",
+    imports: [MatIconModule],
+    templateUrl: "./trial-done-indicator.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrl: "./trial-done-indicator.component.scss"
 })
 export class TrialDoneIndicatorComponent implements OnInit {
   @Input() numQuestions: number = 1;

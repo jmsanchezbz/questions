@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Question } from "../../model/question";
 import { ActivatedRoute, Router } from "@angular/router";
 import { catchError, Observable, of } from "rxjs";
@@ -12,7 +12,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { UserStoreService } from "../../services/user-store.service";
-import { CommonModule, NgClass, NgIf } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { User } from "../../model/user";
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -24,23 +24,21 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { SharedService } from "../../shared/services/shared.service";
 
 @Component({
-  selector: "app-question-detail",
-  templateUrl: "./question-detail.component.html",
-  styleUrl: "./question-detail.component.scss",
-  standalone: true,
-  imports: [
+    selector: "app-question-detail",
+    templateUrl: "./question-detail.component.html",
+    styleUrl: "./question-detail.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     CommonModule,
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
-    NgClass,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatButtonModule,
-  ],
+    MatButtonModule
+]
 })
 export class QuestionDetailComponent {
   public question: Question;

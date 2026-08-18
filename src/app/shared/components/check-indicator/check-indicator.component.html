@@ -1,4 +1,10 @@
-<div *ngIf="show" class="indicator">
-    <mat-icon *ngIf="valid" class="green">done</mat-icon>
-    <mat-icon *ngIf="!valid" class="red">close</mat-icon>
-</div>
+@if (show) {
+  <div class="indicator">
+    @if (valid) {
+      <mat-icon class="green">done</mat-icon>
+    }
+    @if (!valid) {
+      <mat-icon class="red">close</mat-icon>
+    }
+  </div>
+}

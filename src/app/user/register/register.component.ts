@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +16,7 @@ import {
 import { firstValueFrom, of, tap } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { UserService } from "../../services/user.service";
-import { NgIf, NgClass, UpperCasePipe, NgFor } from "@angular/common";
+import { UpperCasePipe } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
@@ -29,23 +29,20 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
-  standalone: true,
-  imports: [
+    selector: "app-register",
+    templateUrl: "./register.component.html",
+    styleUrl: "./register.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
-    NgClass,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
     MatOptionModule,
-    MatSelectModule,
-  ],
+    MatSelectModule
+]
 })
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
@@ -249,7 +246,7 @@ export class RegisterComponent implements OnInit {
       this.register();
     }
   }
-  
+
   private register() {
     this.formSubmitted = true;
 

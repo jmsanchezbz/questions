@@ -1,38 +1,46 @@
 <form [formGroup]="filterForm" class="flex-center">
+  <mat-form-field>
+    <mat-label>Entidad</mat-label>
+    <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="adm">
+      <mat-option disabled value="">Selecciona</mat-option>
+      <mat-option value="caib">CAIB</mat-option>
+      <mat-option value="imas">CIMAS</mat-option>
+      <mat-option value="goib">Goib</mat-option>
+      <mat-option value="local">Local</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Grupo</mat-label>
+    <mat-select id="cbxGroup" name="cbxGroup" formControlName="grp">
+      <mat-option disabled value="">Selecciona</mat-option>
+      @for (g of groups; track g; let i = $index) {
+        <mat-option [value]="g">
+          {{ g | uppercase }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  @if (hideTheme) {
     <mat-form-field>
-        <mat-label>Entidad</mat-label>
-        <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="adm">
-            <mat-option disabled value="">Selecciona</mat-option>
-            <mat-option value="caib">CAIB</mat-option>
-            <mat-option value="imas">CIMAS</mat-option>
-            <mat-option value="goib">Goib</mat-option>
-            <mat-option value="local">Local</mat-option>
-        </mat-select>
+      <mat-label>Tema</mat-label>
+      <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
+        <mat-option disabled value="">Selecciona</mat-option>
+        @for (theme of themes; track theme; let i = $index) {
+          <mat-option [value]="theme">
+            Tema {{ theme }}
+          </mat-option>
+        }
+      </mat-select>
     </mat-form-field>
+  }
+  @if (hideTheme) {
     <mat-form-field>
-        <mat-label>Grupo</mat-label>
-        <mat-select id="cbxGroup" name="cbxGroup" formControlName="grp">
-            <mat-option disabled value="">Selecciona</mat-option>
-            <mat-option *ngFor="let g of groups; index as i" [value]="g">
-                {{ g | uppercase }}
-            </mat-option>
-        </mat-select>
+      <mat-label>Verificadas</mat-label>
+      <mat-select id="cbxVerified" name="cbxVerified" formControlName="verified">
+        <mat-option value="null">Todas</mat-option>
+        <mat-option value="1">Sí</mat-option>
+        <mat-option value="0">No</mat-option>
+      </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="hideTheme">
-        <mat-label>Tema</mat-label>
-        <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
-            <mat-option disabled value="">Selecciona</mat-option>
-            <mat-option *ngFor="let theme of themes; index as i" [value]="theme">
-                Tema {{ theme }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="hideTheme">
-        <mat-label>Verificadas</mat-label>
-        <mat-select id="cbxVerified" name="cbxVerified" formControlName="verified">
-            <mat-option value="null">Todas</mat-option>
-            <mat-option value="1">Sí</mat-option>
-            <mat-option value="0">No</mat-option>
-        </mat-select>
-    </mat-form-field>
+  }
 </form>

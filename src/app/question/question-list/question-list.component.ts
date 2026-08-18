@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   OnInit,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { Question } from "../../model/question";
 import {
@@ -20,7 +21,7 @@ import { QuestionService } from "../../services/question.service";
 import { QuestionFilterChange } from "../../model/question-filter-change";
 import { StorageService } from "../../services/storage.service";
 import { QuestionItemComponent } from "../question-item/question-item.component";
-import { NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { QuestionFilterComponent } from "../question-filter/question-filter.component";
 import { TrialQuestion } from "../../model/trial-question";
 import { UserStoreService } from "../../services/user-store.service";
@@ -28,18 +29,17 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: "app-question-list",
-  templateUrl: "./question-list.component.html",
-  styleUrl: "./question-list.component.scss",
-  standalone: true,
-  imports: [
+    selector: "app-question-list",
+    templateUrl: "./question-list.component.html",
+    styleUrl: "./question-list.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     QuestionFilterComponent,
-    NgFor,
     QuestionItemComponent,
     AsyncPipe,
     MatIconModule,
-    MatButtonModule,
-  ],
+    MatButtonModule
+]
 })
 export class QuestionListComponent implements OnInit, AfterViewInit {
   readonly FILTER_CHANGE: string = "filter-change";

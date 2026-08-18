@@ -1,14 +1,15 @@
 import { _isNumberValue } from "@angular/cdk/coercion";
-import { NgIf } from "@angular/common";
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
-  selector: "app-check-indicator",
-  templateUrl: "./check-indicator.component.html",
-  styleUrl: "./check-indicator.component.scss",
+    selector: "app-check-indicator",
+    templateUrl: "./check-indicator.component.html",
+    styleUrl: "./check-indicator.component.scss",
   standalone: true,
-  imports: [NgIf, MatIconModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [MatIconModule]
 })
 export class CheckIndicatorComponent implements OnChanges {
   @Input() option: number;

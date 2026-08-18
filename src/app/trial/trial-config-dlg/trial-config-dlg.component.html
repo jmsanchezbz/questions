@@ -1,43 +1,47 @@
 <h2 mat-dialog-title>Nuevo examen</h2>
 <form [formGroup]="trialForm" (submit)="submit()">
-    <mat-dialog-content class="flex-center">
-        <p>Configura el tipo de examen</p>
-        <mat-form-field>
-            <mat-label>Entidad</mat-label>
-            <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="adm">
-                <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option value="caib">CAIB</mat-option>
-                <mat-option value="local">Local</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Grupo</mat-label>
-            <mat-select id="cbxGrup" name="cbxGrup" formControlName="grp">
-                <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option value="a1">A1</mat-option>
-                <mat-option value="a2">A2</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Tipo</mat-label>
-            <mat-select id="cbxType" name="cbxType" formControlName="typ" (selectionChange)="onChangeType()">
-                <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option value="g">Genérico</mat-option>
-                <mat-option value="t">Tema</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="trialForm.get('typ').value === 't'">
-            <mat-label>Tema</mat-label>
-            <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
-                <mat-option disabled value="">Selecciona</mat-option>
-                <mat-option *ngFor="let theme of themes; index as i" [value]="theme">
-                    Tema {{ theme }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-button cdkFocusInitial type="button" (click)="close()">Salir</button>
-        <button mat-raised-button color="primary" type="submit">Genera</button>
-    </mat-dialog-actions>
+  <mat-dialog-content class="flex-center">
+    <p>Configura el tipo de examen</p>
+    <mat-form-field>
+      <mat-label>Entidad</mat-label>
+      <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="adm">
+        <mat-option disabled value="">Selecciona</mat-option>
+        <mat-option value="caib">CAIB</mat-option>
+        <mat-option value="local">Local</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Grupo</mat-label>
+      <mat-select id="cbxGrup" name="cbxGrup" formControlName="grp">
+        <mat-option disabled value="">Selecciona</mat-option>
+        <mat-option value="a1">A1</mat-option>
+        <mat-option value="a2">A2</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tipo</mat-label>
+      <mat-select id="cbxType" name="cbxType" formControlName="typ" (selectionChange)="onChangeType()">
+        <mat-option disabled value="">Selecciona</mat-option>
+        <mat-option value="g">Genérico</mat-option>
+        <mat-option value="t">Tema</mat-option>
+      </mat-select>
+    </mat-form-field>
+    @if (trialForm.get('typ').value === 't') {
+      <mat-form-field>
+        <mat-label>Tema</mat-label>
+        <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
+          <mat-option disabled value="">Selecciona</mat-option>
+          @for (theme of themes; track theme; let i = $index) {
+            <mat-option [value]="theme">
+              Tema {{ theme }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button cdkFocusInitial type="button" (click)="close()">Salir</button>
+    <button mat-raised-button color="primary" type="submit">Genera</button>
+  </mat-dialog-actions>
 </form>

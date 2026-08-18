@@ -1,85 +1,119 @@
 <div class="container">
-    <mat-card class="mat-elevation-z4">
-        <section *ngIf="isAdmin">
-            <mat-form-field>
-                <mat-label>Usuario seleccionado</mat-label>
-                <mat-select id="cbxUser" name="cbxUser" [(ngModel)]="selUser" (ngModelChange)="changeUser($event)">
-                    <mat-option *ngFor="let u of users; index as i" [value]="u.id">
-                        {{ u.id }} - {{ u.username }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+  <mat-card class="mat-elevation-z4">
+    @if (isAdmin) {
+      <section>
+        <mat-form-field>
+          <mat-label>Usuario seleccionado</mat-label>
+          <mat-select id="cbxUser" name="cbxUser" [(ngModel)]="selUser" (ngModelChange)="changeUser($event)">
+            @for (u of users; track u; let i = $index) {
+              <mat-option [value]="u.id">
+                {{ u.id }} - {{ u.username }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </section>
+    }
+    <h1>{{this.userId==0?'Perfil':'Registro'}}</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="formSubmit()" class="my-form">
+      @if (this.userId!=null) {
+        <section>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>id</mat-label>
+            <input matInput type="text" formControlName="id" />
+          </mat-form-field>
         </section>
-        <h1>{{this.userId==0?'Perfil':'Registro'}}</h1>
-        <form [formGroup]="registerForm" (ngSubmit)="formSubmit()" class="my-form">
-            <section *ngIf="this.userId!=null">
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>id</mat-label>
-                    <input matInput type="text" formControlName="id" />
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Nombre</mat-label>
-                    <input matInput type="text" formControlName="name" placeholder="Nombre" />
-                    <mat-error *ngIf="registerForm.get('name')?.dirty || formSubmitted">
-                        <span *ngIf="registerForm.get('name')?.hasError('required')">Nombre es
-                            obligatorio</span>
-                    </mat-error>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Usuario</mat-label>
-                    <input matInput type="text" formControlName="username" placeholder="Usuario" autocomplete="off" />
-                    <mat-error *ngIf="registerForm.get('username')?.dirty || formSubmitted">
-                        <span *ngIf="registerForm.get('username')?.hasError('required')">Usuario es
-                            obligatorio</span>
-                    </mat-error>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearance="fill" class="full-width">
-                    <mat-label>Correo electrónico</mat-label>
-                    <input matInput type="email" formControlName="email" placeholder="Correo electrónico" />
-                    <mat-error *ngIf="registerForm.get('email')?.dirty || formSubmitted">
-                        <span *ngIf="registerForm.get('email')?.hasError('required')">Correo electrónico es
-                            obligatorio</span>
-                        <span *ngIf="registerForm.get('email')?.hasError('email')">Correo electrónico debe ser
-                            válido</span>
-                    </mat-error>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field appearence="fill" class="full-width">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput type="password" formControlName="password" required autocomplete="off" />
-                    <mat-error *ngIf="registerForm.get('password')?.dirty || formSubmitted">
-                        <span *ngIf="registerForm.get('password')?.hasError('required')">La contraseña es
-                            obligatoria</span>
-                        <span *ngIf="registerForm.get('password')?.hasError('minLength')">La contraseña debe ser mayor
-                            de 3 caracteres</span>
-                        <span *ngIf="registerForm.get('password')?.hasError('maxLength')">La contraseña no de ser mayor
-                            de 16
-                            caracteres</span></mat-error>
-                </mat-form-field>
-            </section>
-            <section>
-                <mat-form-field *ngIf="isAdmin">
-                    <mat-label>Rol</mat-label>
-                    <mat-select id="cbxRole" name="cbxRole" formControlName="role">
-                        <mat-option value="user">User</mat-option>
-                        <mat-option value="admin">Admin</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </section>
-            <section>
-                <button mat-button type="button" (click)="goHome()">Cancela</button>
-                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId==null"
-                    [disabled]="!registerForm.valid">Registra</button>
-                <button mat-raised-button color="primary" type="submit" *ngIf="this.userId!=null"
-                    [disabled]="!registerForm.valid">Guarda</button>
-            </section>
-        </form>
+      }
+      <section>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput type="text" formControlName="name" placeholder="Nombre" />
+          @if (registerForm.get('name')?.dirty || formSubmitted) {
+            <mat-error>
+              @if (registerForm.get('name')?.hasError('required')) {
+                <span>Nombre es
+                obligatorio</span>
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <input matInput type="text" formControlName="username" placeholder="Usuario" autocomplete="off" />
+          @if (registerForm.get('username')?.dirty || formSubmitted) {
+            <mat-error>
+              @if (registerForm.get('username')?.hasError('required')) {
+                <span>Usuario es
+                obligatorio</span>
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="Correo electrónico" />
+          @if (registerForm.get('email')?.dirty || formSubmitted) {
+            <mat-error>
+              @if (registerForm.get('email')?.hasError('required')) {
+                <span>Correo electrónico es
+                obligatorio</span>
+              }
+              @if (registerForm.get('email')?.hasError('email')) {
+                <span>Correo electrónico debe ser
+                válido</span>
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+      </section>
+      <section>
+        <mat-form-field appearence="fill" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" required autocomplete="off" />
+          @if (registerForm.get('password')?.dirty || formSubmitted) {
+            <mat-error>
+              @if (registerForm.get('password')?.hasError('required')) {
+                <span>La contraseña es
+                obligatoria</span>
+              }
+              @if (registerForm.get('password')?.hasError('minLength')) {
+                <span>La contraseña debe ser mayor
+                de 3 caracteres</span>
+              }
+              @if (registerForm.get('password')?.hasError('maxLength')) {
+                <span>La contraseña no de ser mayor
+                  de 16
+                caracteres</span>
+              }</mat-error>
+            }
+          </mat-form-field>
+        </section>
+        <section>
+          @if (isAdmin) {
+            <mat-form-field>
+              <mat-label>Rol</mat-label>
+              <mat-select id="cbxRole" name="cbxRole" formControlName="role">
+                <mat-option value="user">User</mat-option>
+                <mat-option value="admin">Admin</mat-option>
+              </mat-select>
+            </mat-form-field>
+          }
+        </section>
+        <section>
+          <button mat-button type="button" (click)="goHome()">Cancela</button>
+          @if (this.userId==null) {
+            <button mat-raised-button color="primary" type="submit"
+            [disabled]="!registerForm.valid">Registra</button>
+          }
+          @if (this.userId!=null) {
+            <button mat-raised-button color="primary" type="submit"
+            [disabled]="!registerForm.valid">Guarda</button>
+          }
+        </section>
+      </form>
     </mat-card>
-</div>
+  </div>

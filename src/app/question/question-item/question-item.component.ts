@@ -2,13 +2,13 @@ import {
   Component,
   EventEmitter,
   Input,
-  NgModule,
   OnInit,
   Output,
+  ChangeDetectionStrategy
 } from "@angular/core";
 import { Question } from "../../model/question";
-import { NgClass, NgIf } from "@angular/common";
-import { Router, RouterLink } from "@angular/router";
+import { NgClass } from "@angular/common";
+import { Router } from "@angular/router";
 import { MatRadioModule } from "@angular/material/radio";
 import { FormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
@@ -20,20 +20,18 @@ import { UserService } from "../../services/user.service";
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-  selector: "app-question-item",
-  templateUrl: "./question-item.component.html",
-  styleUrl: "./question-item.component.scss",
-  standalone: true,
-  imports: [
-    RouterLink,
-    NgIf,
+    selector: "app-question-item",
+    templateUrl: "./question-item.component.html",
+    styleUrl: "./question-item.component.scss",
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
     FormsModule,
     MatRadioModule,
     MatIconModule,
     CheckIndicatorComponent,
     NgClass,
-    MatButtonModule,
-  ],
+    MatButtonModule
+]
 })
 export class QuestionItemComponent implements OnInit {
   @Input() tQuestion: TrialQuestion;
@@ -101,7 +99,7 @@ export class QuestionItemComponent implements OnInit {
 
   edit() {
     console.log(`Edit: /question/${this.question.id}`);
-    
+
     this.router.navigate([`/question/${this.question.id}`]);
   }
 }
