@@ -7,6 +7,8 @@
       <mat-select id="cbxEntidad" name="cbxEntidad" formControlName="adm">
         <mat-option disabled value="">Selecciona</mat-option>
         <mat-option value="caib">CAIB</mat-option>
+        <mat-option value="imas">CIMAS</mat-option>
+        <mat-option value="goib">Goib</mat-option>
         <mat-option value="local">Local</mat-option>
       </mat-select>
     </mat-form-field>
@@ -27,17 +29,17 @@
       </mat-select>
     </mat-form-field>
     @if (trialForm.get('typ').value === 't') {
-      <mat-form-field>
-        <mat-label>Tema</mat-label>
-        <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
-          <mat-option disabled value="">Selecciona</mat-option>
-          @for (theme of themes; track theme; let i = $index) {
-            <mat-option [value]="theme">
-              Tema {{ theme }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field>
+      <mat-label>Tema</mat-label>
+      <mat-select id="cbxTheme" name="cbxTheme" formControlName="thm">
+        <mat-option disabled value="">Selecciona</mat-option>
+        @for (theme of themes; track theme; let i = $index) {
+        <mat-option [value]="theme">
+          Tema {{ theme }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
     }
   </mat-dialog-content>
   <mat-dialog-actions>
