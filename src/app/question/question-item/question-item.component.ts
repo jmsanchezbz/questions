@@ -97,6 +97,18 @@ export class QuestionItemComponent implements OnInit {
     return this.userSvc.isAuthenticated();
   }
 
+  isRight(): boolean {
+    return this.tQuestion.is_right;
+  }
+
+  isWrong(): boolean {
+    return this.selected != null && !this.tQuestion.is_right;
+  }
+
+  isUnanswered(): boolean {
+    return this.selected == null;
+  }
+
   edit() {
     console.log(`Edit: /question/${this.question.id}`);
 

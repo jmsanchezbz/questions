@@ -18,6 +18,16 @@ h4 {
   background-color: rgb(200 200 200);
 }
 
+.question-right {
+  border-left: 2px solid green;
+}
+.question-wrong {
+  border-left: 2px solid red;
+}
+.question-unanswered {
+  border-left: 2px solid yellow;
+}
+
 .radio-group {
   display: flex;
   flex-direction: column;
