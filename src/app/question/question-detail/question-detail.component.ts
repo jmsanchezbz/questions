@@ -122,7 +122,7 @@ export class QuestionDetailComponent {
       ]),
       answer: new FormControl(this.question.answer?.toString(), []),
       explanation: new FormControl(this.question.explanation, [
-        Validators.maxLength(1500),
+        Validators.maxLength(4000),
       ]),
       verified: new FormControl(this.question.verified, []),
     });
@@ -132,7 +132,7 @@ export class QuestionDetailComponent {
     this.answerForm = this.fb.group({
       answer: new FormControl(this.question.answer?.toString(), []),
       explanation: new FormControl(this.question.explanation, [
-        Validators.maxLength(1500),
+        Validators.maxLength(4000),
       ]),
     });
   }
