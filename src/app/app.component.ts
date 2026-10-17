@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     private routerLogger: RouterLoggingService
   ) {
     console.log("Production environment: " + environment.production);
-    userSvc.startTokenValidation();
+    //userSvc.startTokenValidation();
   }
 
   ngOnInit(): void {}
