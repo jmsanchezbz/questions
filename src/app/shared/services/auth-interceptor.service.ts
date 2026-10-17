@@ -1,6 +1,14 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Router } from "@angular/router";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { UserStoreService } from "../../services/user-store.service";
 
 @Injectable({
@@ -9,7 +17,10 @@ import { UserStoreService } from "../../services/user-store.service";
 export class AuthInterceptorService implements HttpInterceptor {
   private access_token: string = "";
 
-  constructor(private userStoreService: UserStoreService) {}
+  constructor(
+    private userStoreService: UserStoreService,
+    private router: Router
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -35,6 +46,14 @@ export class AuthInterceptorService implements HttpInterceptor {
       localStorage.length
     );
 
-    return next.handle(req);
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401 && !req.url.includes("/api/login")) {
+          this.userStoreService.reset();
+          this.router.navigate(["/user/login"]);
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }
