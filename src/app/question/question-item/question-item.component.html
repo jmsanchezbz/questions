@@ -14,7 +14,7 @@
   </h4>
 
   <mat-radio-group aria-labelledby="question" class="radio-group" [(ngModel)]="selected"
-    (change)="trialCompleted?null:updateTQ()" [disabled]="trialCompleted">
+    (change)="onAnswerChange($event)" [disabled]="trialCompleted">
     <mat-radio-button id="{{question.id}}-o1" class="radio-button" [value]="1">
       <strong>A.</strong> {{ question.option1 }}@if (index==-1 || trialCompleted) {
       <app-check-indicator [option]="1" [answer]="question.answer" [selected]="selected"></app-check-indicator>
