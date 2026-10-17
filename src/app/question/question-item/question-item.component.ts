@@ -75,22 +75,16 @@ export class QuestionItemComponent implements OnInit {
   }
 
   onAnswerChange(event: any) {
-    if (this.trialCompleted) {
+    if (this.trialCompleted || !this.tQuestion) {
       return;
     }
 
-    const newValue = event?.value ?? null;
+    const newValue = event?.value !== undefined ? event.value : event;
 
-    if (newValue !== null && this.selected === newValue) {
-      this.selected = null;
-      this.tQuestion.answer = null;
-      this.tQuestion.is_right = false;
-      this.answerSelected.emit(this.tQuestion);
-      return;
+    if (newValue !== null && newValue !== this.tQuestion.answer) {
+      this.selected = newValue;
+      this.updateTQ();
     }
-
-    this.selected = newValue;
-    this.updateTQ();
   }
 
   updateTQ() {

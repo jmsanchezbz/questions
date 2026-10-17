@@ -47,13 +47,40 @@ describe('QuestionItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should clear the selected answer when the same option is chosen again', () => {
+  it('should send an answer if it is different than previously selected and trial is not finished', () => {
+    spyOn(component['answerSelected'], 'emit');
+    component.tQuestion.answer = 2;
     component.selected = 2;
+    component.trialCompleted = false;
 
-    component.onAnswerChange({ value: 2, source: { checked: true } } as any);
+    component.onAnswerChange({ value: 3 } as any);
 
-    expect(component.selected).toBeNull();
-    expect(component.tQuestion.answer).toBeNull();
-    expect(component.tQuestion.is_right).toBeFalse();
+    expect(component.selected).toBe(3);
+    expect(component.tQuestion.answer).toBe(3);
+    expect(component['answerSelected'].emit).toHaveBeenCalledWith(component.tQuestion);
+  });
+
+  it('should not send an answer if it is the same as previously selected', () => {
+    spyOn(component['answerSelected'], 'emit');
+    component.tQuestion.answer = 2;
+    component.selected = 2;
+    component.trialCompleted = false;
+
+    component.onAnswerChange({ value: 2 } as any);
+
+    expect(component['answerSelected'].emit).not.toHaveBeenCalled();
+    expect(component.tQuestion.answer).toBe(2);
+  });
+
+  it('should not send an answer if trial is completed', () => {
+    spyOn(component['answerSelected'], 'emit');
+    component.tQuestion.answer = 2;
+    component.selected = 2;
+    component.trialCompleted = true;
+
+    component.onAnswerChange({ value: 3 } as any);
+
+    expect(component['answerSelected'].emit).not.toHaveBeenCalled();
+    expect(component.tQuestion.answer).toBe(2);
   });
 });
